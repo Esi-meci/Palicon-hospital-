@@ -1,0 +1,247 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Information about a patient or admin in the hospital system",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The unique Firebase Authentication UID of the user"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the user"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["patient", "admin"],
+          "description": "Role-based access control level"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating registration date"
+        }
+      },
+      "required": ["uid", "email", "name", "role", "createdAt"]
+    },
+    "Doctor": {
+      "title": "Doctor Listing",
+      "description": "Information about a medical professional associated with the hospital",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the doctor"
+        },
+        "name": {
+          "type": "string",
+          "description": "Doctor's name"
+        },
+        "specialty": {
+          "type": "string",
+          "description": "Medical specialty (e.g., Cardiology, Pediatrics)"
+        },
+        "rating": {
+          "type": "number",
+          "description": "Average review rating"
+        },
+        "experience": {
+          "type": "string",
+          "description": "Years of experience"
+        },
+        "fees": {
+          "type": "number",
+          "description": "Consultation fees"
+        },
+        "image": {
+          "type": "string",
+          "description": "URL or avatar visual reference for the doctor"
+        },
+        "availability": {
+          "type": "string",
+          "description": "Serialized availability summary or schedule parameters"
+        },
+        "email": {
+          "type": "string",
+          "description": "Contact email"
+        }
+      },
+      "required": ["id", "name", "specialty", "rating", "experience", "fees", "image", "availability"]
+    },
+    "Appointment": {
+      "title": "Appointment Booking",
+      "description": "Details of an appointment booking with a doctor",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the appointment"
+        },
+        "patientId": {
+          "type": "string",
+          "description": "UID of the booking patient"
+        },
+        "patientName": {
+          "type": "string",
+          "description": "Name of the booking patient"
+        },
+        "patientEmail": {
+          "type": "string",
+          "description": "Email of the booking patient"
+        },
+        "doctorId": {
+          "type": "string",
+          "description": "ID of the designated doctor"
+        },
+        "doctorName": {
+          "type": "string",
+          "description": "Name of the doctor"
+        },
+        "doctorSpecialty": {
+          "type": "string",
+          "description": "Specialty of the doctor"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of the appointment (YYYY-MM-DD)"
+        },
+        "time": {
+          "type": "string",
+          "description": "Time slot of the appointment (e.g., 10:00 AM)"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "confirmed", "completed", "cancelled"],
+          "description": "Appointment status"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Symptom description or general patient notes"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp for when the appointment was created"
+        }
+      },
+      "required": ["id", "patientId", "patientName", "patientEmail", "doctorId", "doctorName", "doctorSpecialty", "date", "time", "status", "createdAt"]
+    },
+    "Report": {
+      "title": "Medical Report",
+      "description": "Records and medical diagnostic sheets uploaded or attached to a user profile",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the report"
+        },
+        "patientId": {
+          "type": "string",
+          "description": "UID of the patient this report belongs to"
+        },
+        "patientName": {
+          "type": "string",
+          "description": "Name of the patient"
+        },
+        "doctorId": {
+          "type": "string",
+          "description": "Optional/Required identifier of the doctor who compiled or reviewed the report"
+        },
+        "doctorName": {
+          "type": "string",
+          "description": "Doctor's name associated with this report"
+        },
+        "diagnosis": {
+          "type": "string",
+          "description": "Core medical diagnosis summary"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Detailed remarks or instructions"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "Name of the generated or uploaded file document"
+        },
+        "fileData": {
+          "type": "string",
+          "description": "Document text contents or base64 structure"
+        },
+        "status": {
+          "type": "string",
+          "description": "Verification or review status of the file"
+        },
+        "uploadedAt": {
+          "type": "string",
+          "description": "ISO timestamp of the record upload"
+        }
+      },
+      "required": ["id", "patientId", "patientName", "doctorName", "diagnosis", "fileName", "fileData", "uploadedAt"]
+    },
+    "Inquiry": {
+      "title": "Support Inquiry",
+      "description": "Visitor chat support message or clinical consultation inquire details",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "visitorName": {
+          "type": "string"
+        },
+        "visitorEmail": {
+          "type": "string"
+        },
+        "visitorPhone": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "adminReply": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "replied"]
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "repliedAt": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "visitorName", "visitorEmail", "message", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Profiles of registered users"
+    },
+    "doctors/{doctorId}": {
+      "schema": "Doctor",
+      "description": "List of available doctors"
+    },
+    "appointments/{appointmentId}": {
+      "schema": "Appointment",
+      "description": "Appointments scheduled between patients and doctors"
+    },
+    "reports/{reportId}": {
+      "schema": "Report",
+      "description": "Medical reports and records"
+    },
+    "inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "Support inquiries and live chat feedback records"
+    }
+  }
+}
