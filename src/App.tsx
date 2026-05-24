@@ -37,6 +37,7 @@ import AdminPanel from "./components/AdminPanel";
 import AboutUs from "./components/AboutUs";
 import ContactUs from "./components/ContactUs";
 import LiveChatWidget from "./components/LiveChatWidget";
+import LoginModal from "./components/LoginModal";
 
 // Lucide icon for local display alerts
 import { Sparkles, Activity, ShieldAlert, BadgeCheck, Phone, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
@@ -45,7 +46,16 @@ import { motion } from "motion/react";
 export default function App() {
   const [currentView, setView] = useState<string>("home");
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(() => {
+    try {
+      const saved = localStorage.getItem("palicon_user_session");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
+  const [isProcessingGoogle, setIsProcessingGoogle] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
   // Firestore Data Collections
@@ -99,7 +109,9 @@ export default function App() {
           const userDocSnap = await getDoc(userDocRef);
 
           if (userDocSnap.exists()) {
-            setUserProfile(userDocSnap.data() as UserProfile);
+            const existingProfile = userDocSnap.data() as UserProfile;
+            setUserProfile(existingProfile);
+            localStorage.setItem("palicon_user_session", JSON.stringify(existingProfile));
           } else {
             // Self-assign role: "admin" if email is bootstrapped, else "patient"
             const role: UserRole = userObj.email === "gowinmercy@gmail.com" ? "admin" : "patient";
@@ -113,20 +125,25 @@ export default function App() {
             
             await setDoc(userDocRef, newProfile);
             setUserProfile(newProfile);
+            localStorage.setItem("palicon_user_session", JSON.stringify(newProfile));
           }
         } catch (err) {
           console.error("Failed to sync authenticated user profile", err);
           // Safe offline state mapping for demo compatibility
-          setUserProfile({
+          const fallbackProfile: UserProfile = {
             uid: userObj.uid,
             name: userObj.displayName || "Patient Demo-Mode",
             email: userObj.email || "tester@palicon.org",
             role: userObj.email === "gowinmercy@gmail.com" ? "admin" : "patient",
             createdAt: Timestamp.now()
-          });
+          };
+          setUserProfile(fallbackProfile);
+          localStorage.setItem("palicon_user_session", JSON.stringify(fallbackProfile));
         }
       } else {
-        setUserProfile(null);
+        if (!localStorage.getItem("palicon_user_session")) {
+          setUserProfile(null);
+        }
       }
       setLoading(false);
     });
@@ -237,19 +254,30 @@ export default function App() {
 
   // Handle Authentication trigger
   const handleLogin = async () => {
+    setShowLoginModal(true);
+  };
+
+  const handleGoogleSignIn = async () => {
     try {
+      setIsProcessingGoogle(true);
       setGlobalError(null);
       await signInWithPopup(auth, googleProvider);
-      triggerSuccessBanner("Successfully logged into clinical workspace.");
-    } catch (err) {
-      setGlobalError("Authentication failed. Please verify popup blocks or credentials.");
-      console.error(err);
+      triggerSuccessBanner("Successfully authenticated Google session.");
+      setShowLoginModal(false);
+    } catch (err: any) {
+      console.error("Google authentication error:", err);
+      throw err;
+    } finally {
+      setIsProcessingGoogle(false);
     }
   };
 
   const handleLogout = async () => {
     try {
+      localStorage.removeItem("palicon_user_session");
       await signOut(auth);
+      setUserProfile(null);
+      setFirebaseUser(null);
       setView("home");
       triggerSuccessBanner("Logged out successfully.");
     } catch (err) {
@@ -280,8 +308,9 @@ export default function App() {
       await setDoc(mockUserRef, mockProfile);
       
       setUserProfile(mockProfile);
+      localStorage.setItem("palicon_user_session", JSON.stringify(mockProfile));
       setView("dashboard");
-      triggerSuccessBanner(`Demo Mode Active: Authenticated as ${role.toUpperCase()}`);
+      triggerSuccessBanner(`Demo Mode Active : Authenticated as ${role.toUpperCase()}`);
     } catch (err) {
       console.error("Error setting up simulated dashboard profile", err);
       setGlobalError("Simulated registration error.");
@@ -579,11 +608,18 @@ export default function App() {
           {currentView === "dashboard" && !userProfile && (
             <div className="py-24 max-w-md mx-auto px-4 text-center space-y-4">
               <ShieldAlert className="w-12 h-12 text-emerald-700 mx-auto" strokeWidth={1.5} />
-              <div className="space-y-1">
+              <div className="space-y-3">
                 <h2 className="text-xl font-sans font-bold text-emerald-950">Patient Admission Gate Locked</h2>
                 <p className="text-sm text-emerald-900/60 leading-relaxed font-sans">
-                  Please authenticate with your secure clinical login card or select one of our quick developer simulation profiles to explore.
+                  Please authenticate with your secure clinical login card or enter customize credentials to manage medical bookings.
                 </p>
+                <button
+                  onClick={handleLogin}
+                  id="dashboard-gate-login-btn"
+                  className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-xs mt-2"
+                >
+                  🔒 Unlock Smart Login Gate
+                </button>
               </div>
 
               {/* Developer Environment Preset Selectors */}
@@ -627,6 +663,20 @@ export default function App() {
             setBookingDoctor(null);
             handleLogin();
           }}
+        />
+      )}
+
+      {/* Smart Secure Login Modal */}
+      {showLoginModal && (
+        <LoginModal
+          onClose={() => setShowLoginModal(false)}
+          onSuccess={(profile) => {
+            setUserProfile(profile);
+            setShowLoginModal(false);
+            setView("dashboard");
+          }}
+          onGoogleLoginTrigger={handleGoogleSignIn}
+          isProcessingGoogle={isProcessingGoogle}
         />
       )}
 
