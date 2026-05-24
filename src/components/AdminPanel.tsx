@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Users, Calendar, Plus, Filter, ShieldAlert, Award, FileCheck2, Clock, Trash2, Check, CheckCircle2, RefreshCw, MessageSquare, Mail, Share2, Send 
 } from "lucide-react";
+import { motion } from "motion/react";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import { Appointment, Doctor, MedicalReport, UserProfile, Inquiry } from "../types";
 import { INITIAL_DOCTORS } from "../data";
 
@@ -50,11 +53,47 @@ export default function AdminPanel({
   // Derive selected inquiry
   const selectedInquiry = (inquiries || []).find((i) => i.id === selectedInquiryId);
 
+  // Synchronize typing status in Firestore based on active input
+  useEffect(() => {
+    if (!selectedInquiryId) return;
+
+    const isCurrentlyTyping = replyText.length > 0;
+
+    const timer = setTimeout(async () => {
+      try {
+        const docRef = doc(db, "inquiries", selectedInquiryId);
+        await updateDoc(docRef, { adminTyping: isCurrentlyTyping });
+      } catch (e) {
+        console.warn("Could not update typing indicator", e);
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [replyText, selectedInquiryId]);
+
+  // Clean up typing status on previous inquiry when switching or unmounting
+  useEffect(() => {
+    const prevInquiryId = selectedInquiryId;
+    return () => {
+      if (prevInquiryId) {
+        const docRef = doc(db, "inquiries", prevInquiryId);
+        updateDoc(docRef, { adminTyping: false }).catch(() => {});
+      }
+    };
+  }, [selectedInquiryId]);
+
   const handleAdminReplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedInquiryId || !replyText) return;
     try {
       setIsSendingReply(true);
+      // Turn off typing indicator immediately
+      try {
+        const docRef = doc(db, "inquiries", selectedInquiryId);
+        await updateDoc(docRef, { adminTyping: false });
+      } catch (e) {}
       await onReplyInquiry(selectedInquiryId, replyText);
       setReplyText("");
     } catch (err) {
@@ -241,14 +280,20 @@ export default function AdminPanel({
                   >
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold font-mono uppercase ${
-                          apt.status === "confirmed" ? "bg-emerald-100 text-emerald-800" :
-                          apt.status === "cancelled" ? "bg-rose-100 text-rose-800" :
-                          apt.status === "completed" ? "bg-slate-100 text-slate-800" :
-                          "bg-amber-100 text-amber-800"
-                        }`}>
+                        <motion.span
+                          key={apt.status}
+                          initial={{ scale: 0.85, opacity: 0.5, y: -2 }}
+                          animate={{ scale: 1, opacity: 1, y: 0 }}
+                          transition={{ type: "spring", stiffness: 450, damping: 25 }}
+                          className={`px-2 py-0.5 rounded text-[9px] font-bold font-mono uppercase transition-colors duration-300 ${
+                            apt.status === "confirmed" ? "bg-emerald-100 text-emerald-800 border border-emerald-200" :
+                            apt.status === "cancelled" ? "bg-rose-100 text-rose-800 border border-rose-200" :
+                            apt.status === "completed" ? "bg-slate-100 text-slate-800 border border-slate-200" :
+                            "bg-amber-100 text-amber-800 border border-amber-200"
+                          }`}
+                        >
                           {apt.status}
-                        </span>
+                        </motion.span>
                         <h4 className="font-bold text-emerald-950 text-sm font-sans">
                           {apt.patientName} &rarr; <span className="text-emerald-700">{apt.doctorName}</span>
                         </h4>

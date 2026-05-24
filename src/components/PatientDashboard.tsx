@@ -1,7 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Calendar, FileText, Plus, ShieldAlert, Sparkles, AlertCircle, Clock, Trash2, CheckCircle2, UploadCloud, Eye, BrainCircuit 
 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+
+function parseAppointmentDateTime(dateStr: string, timeStr: string): Date | null {
+  try {
+    const match = timeStr.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
+    if (!match) {
+      const d = new Date(`${dateStr} ${timeStr}`);
+      return isNaN(d.getTime()) ? null : d;
+    }
+    let [_, hoursStr, minutesStr, ampm] = match;
+    let hours = parseInt(hoursStr, 10);
+    const minutes = parseInt(minutesStr, 10);
+    if (ampm.toUpperCase() === "PM" && hours < 12) {
+      hours += 12;
+    } else if (ampm.toUpperCase() === "AM" && hours === 12) {
+      hours = 0;
+    }
+    
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return null;
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    
+    const dateObj = new Date(year, month, day, hours, minutes, 0, 0);
+    return isNaN(dateObj.getTime()) ? null : dateObj;
+  } catch (err) {
+    return null;
+  }
+}
 import { Appointment, MedicalReport, UserProfile, Doctor } from "../types";
 
 interface PatientDashboardProps {
@@ -96,6 +126,92 @@ export default function PatientDashboard({
   // Filter user specific logs
   const userAppointments = appointments.filter(a => a.patientId === user.uid);
   const userReports = reports.filter(r => r.patientId === user.uid);
+
+  // Local state notification system for appointments:
+  // Detects and signals alerts that are exactly 48h, 24h, and 5h before each upcoming booked session.
+  const [dismissedAlerts, setDismissedAlerts] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem("palicon_dismissed_alerts");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const dismissAlert = (alertKey: string) => {
+    const updated = [...dismissedAlerts, alertKey];
+    setDismissedAlerts(updated);
+    try {
+      localStorage.setItem("palicon_dismissed_alerts", JSON.stringify(updated));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const now = new Date();
+  
+  const appointmentAlerts = userAppointments
+    .filter(apt => apt.status !== "cancelled" && apt.status !== "completed")
+    .flatMap(apt => {
+      const aptDateObj = parseAppointmentDateTime(apt.date, apt.time);
+      if (!aptDateObj) return [];
+      
+      const diffMs = aptDateObj.getTime() - now.getTime();
+      const diffHours = diffMs / (1000 * 60 * 60);
+
+      const alertsForThisApt = [];
+
+      // 5 hours before threshold
+      if (diffHours > 0 && diffHours <= 5) {
+        const key = `${apt.id}_5h`;
+        if (!dismissedAlerts.includes(key)) {
+          alertsForThisApt.push({
+            key,
+            aptId: apt.id,
+            doctorName: apt.doctorName,
+            time: apt.time,
+            title: "Urgent: Session is Starting Soon!",
+            message: `Your appointment with ${apt.doctorName} is in less than 5 hours (scheduled for ${apt.time} today). Please be ready!`,
+            type: "urgent", // red/amber
+            timeLeftLabel: `${Math.ceil(diffHours)} hours remaining`
+          });
+        }
+      } 
+      // 24 hours before threshold
+      else if (diffHours > 5 && diffHours <= 24) {
+        const key = `${apt.id}_24h`;
+        if (!dismissedAlerts.includes(key)) {
+          alertsForThisApt.push({
+            key,
+            aptId: apt.id,
+            doctorName: apt.doctorName,
+            time: apt.time,
+            title: "Appointment Reminder (24h Alert)",
+            message: `Your appointment with ${apt.doctorName} is in less than 24 hours (scheduled for ${apt.date} at ${apt.time}).`,
+            type: "warning", // yellow/emerald-amber
+            timeLeftLabel: "Less than 24 hours"
+          });
+        }
+      }
+      // 48 hours before threshold
+      else if (diffHours > 24 && diffHours <= 48) {
+        const key = `${apt.id}_48h`;
+        if (!dismissedAlerts.includes(key)) {
+          alertsForThisApt.push({
+            key,
+            aptId: apt.id,
+            doctorName: apt.doctorName,
+            time: apt.time,
+            title: "Upcoming Appointment Notice (48h)",
+            message: `Attending reminder: Appointment scheduled with ${apt.doctorName} is coming up in less than 48 hours (scheduled for ${apt.date} at ${apt.time}).`,
+            type: "info", // cool blue/gray
+            timeLeftLabel: "Less than 48 hours"
+          });
+        }
+      }
+
+      return alertsForThisApt;
+    });
 
   const handleUploadReport = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -327,6 +443,72 @@ export default function PatientDashboard({
 
         {/* Right Side: Tab Workspace */}
         <div className="lg:col-span-2 space-y-6">
+
+          {/* Dynamic Appointment Alert Reminders */}
+          <AnimatePresence>
+            {appointmentAlerts.length > 0 && (
+              <div className="space-y-3 bg-white border border-emerald-100 p-5 rounded-2xl shadow-sm">
+                <div className="flex items-center justify-between border-b border-rose-100/40 pb-2">
+                  <span className="text-xs font-bold text-emerald-950 font-mono flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping shrink-0" />
+                    APPOINTMENT NOTICES ({appointmentAlerts.length})
+                  </span>
+                  <span className="text-[10px] text-emerald-900/40">Real-time schedule monitoring</span>
+                </div>
+                
+                <div className="space-y-2 max-h-[280px] overflow-y-auto pr-1">
+                  {appointmentAlerts.map((alert) => {
+                    const urgentColor = "bg-rose-50/70 border-rose-200 text-rose-950";
+                    const warningColor = "bg-amber-50/70 border-amber-200 text-amber-950";
+                    const infoColor = "bg-sky-50/70 border-sky-200 text-sky-950";
+                    
+                    let colorClasses = infoColor;
+                    let iconBg = "bg-sky-500 text-white";
+                    if (alert.type === "urgent") {
+                      colorClasses = urgentColor;
+                      iconBg = "bg-rose-600 text-white";
+                    } else if (alert.type === "warning") {
+                      colorClasses = warningColor;
+                      iconBg = "bg-amber-500 text-white";
+                    }
+
+                    return (
+                      <motion.div
+                        key={alert.key}
+                        initial={{ opacity: 0, scale: 0.98, y: -4 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.98, y: -4 }}
+                        transition={{ duration: 0.2 }}
+                        className={`border rounded-xl p-3.5 flex gap-3 relative shadow-xs ${colorClasses}`}
+                      >
+                        <div className={`w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center shrink-0 mt-0.5`}>
+                          <Clock className="w-4 h-4 animate-pulse" />
+                        </div>
+                        <div className="flex-1 pr-14 text-left">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className="font-bold text-xs sm:text-sm font-sans">{alert.title}</h4>
+                            <span className="text-[9px] uppercase font-bold font-mono px-1.5 py-0.5 rounded-md bg-white/70 border border-black/5">
+                              {alert.timeLeftLabel}
+                            </span>
+                          </div>
+                          <p className="text-xs font-semibold text-emerald-950/80 mt-1 leading-relaxed">
+                            {alert.message}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => dismissAlert(alert.key)}
+                          className="absolute right-3 top-3.5 text-black/40 hover:text-rose-700 font-bold text-xs cursor-pointer p-1 transition-colors hover:bg-black/5 rounded uppercase tracking-wider font-mono text-[10px]"
+                          title="Dismiss alert"
+                        >
+                          Dismiss
+                        </button>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </AnimatePresence>
           
           {/* Tabs Selector Navigation */}
           <div className="flex border-b border-emerald-100">
@@ -402,14 +584,20 @@ export default function PatientDashboard({
 
                         {/* Status tag & Cancel Button */}
                         <div className="flex sm:flex-col items-end gap-3 justify-between shrink-0">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-bold leading-none ${
-                            apt.status === "confirmed" ? "bg-emerald-100 text-emerald-800" :
-                            apt.status === "cancelled" ? "bg-rose-100 text-rose-800" :
-                            apt.status === "completed" ? "bg-slate-100 text-slate-800" :
-                            "bg-amber-100 text-amber-800" // pending
-                          }`}>
+                          <motion.span
+                            key={apt.status}
+                            initial={{ scale: 0.85, opacity: 0.5, y: -2 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            transition={{ type: "spring", stiffness: 450, damping: 25 }}
+                            className={`px-2.5 py-1 rounded-full text-xs font-bold leading-none border transition-colors duration-300 ${
+                              apt.status === "confirmed" ? "bg-emerald-100 text-emerald-800 border-emerald-200" :
+                              apt.status === "cancelled" ? "bg-rose-100 text-rose-800 border-rose-200" :
+                              apt.status === "completed" ? "bg-slate-100 text-slate-800 border-slate-200" :
+                              "bg-amber-100 text-amber-800 border-amber-200" // pending
+                            }`}
+                          >
                             {apt.status}
-                          </span>
+                          </motion.span>
 
                           {isPending && (
                             <button

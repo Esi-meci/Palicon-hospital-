@@ -3,7 +3,7 @@ import { MessageSquare, X, Send, BadgeCheck, ShieldAlert, Sparkles, Phone } from
 import { collection, doc, setDoc, query, where, onSnapshot, Timestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { UserProfile } from "../types";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface LiveChatWidgetProps {
   user: UserProfile | null;
@@ -18,6 +18,32 @@ export default function LiveChatWidget({ user, onSuccessMessage }: LiveChatWidge
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [activeInquiryId, setActiveInquiryId] = useState<string | null>(() => {
+    return localStorage.getItem("palicon_active_inquiry_id");
+  });
+  const [activeInquiry, setActiveInquiry] = useState<any | null>(null);
+
+  // Subscribe to real-time updates for active inquiry
+  useEffect(() => {
+    if (!activeInquiryId) {
+      setActiveInquiry(null);
+      return;
+    }
+
+    const docRef = doc(db, "inquiries", activeInquiryId);
+    const unsub = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setActiveInquiry({ id: docSnap.id, ...docSnap.data() });
+      } else {
+        setActiveInquiry(null);
+      }
+    }, (err) => {
+      console.error("LiveChatWidget listen error:", err);
+    });
+
+    return () => unsub();
+  }, [activeInquiryId]);
 
   // Auto-fill logged in credentials
   useEffect(() => {
@@ -54,6 +80,9 @@ export default function LiveChatWidget({ user, onSuccessMessage }: LiveChatWidge
       };
 
       await setDoc(doc(db, "inquiries", inquiryId), newInquiry);
+      
+      setActiveInquiryId(inquiryId);
+      localStorage.setItem("palicon_active_inquiry_id", inquiryId);
 
       setFeedbackSuccess(true);
       setMessageText("");
@@ -77,8 +106,15 @@ export default function LiveChatWidget({ user, onSuccessMessage }: LiveChatWidge
     >
       
       {/* Floating Panel (Conditional view) */}
-      {isOpen && (
-        <div className="bg-white border border-emerald-100 rounded-2xl shadow-xl w-80 sm:w-96 text-left overflow-hidden transition-all duration-300 transform scale-100 flex flex-col h-[400px]">
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="bg-white border border-emerald-100 rounded-2xl shadow-xl w-80 sm:w-96 text-left overflow-hidden flex flex-col h-[400px]"
+          >
           
           {/* Header */}
           <div className="bg-emerald-800 p-4 text-white flex items-center justify-between cursor-grab active:cursor-grabbing">
@@ -131,6 +167,60 @@ export default function LiveChatWidget({ user, onSuccessMessage }: LiveChatWidge
                 <span>Submitted successfully into our admin live workspace dashboard!</span>
               </div>
             )}
+
+            {activeInquiry && (
+              <div className="flex flex-col gap-4">
+                {/* User's Message */}
+                <div className="flex gap-2 items-start max-w-[85%] self-end flex-row-reverse text-right">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 font-extrabold flex items-center justify-center shrink-0 text-xs">
+                    U
+                  </div>
+                  <div className="bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-xs shadow-xs text-left">
+                    <p className="leading-relaxed font-semibold">{activeInquiry.message}</p>
+                    <p className="text-[9px] text-white/60">You • {activeInquiry.createdAt && typeof activeInquiry.createdAt.toDate === "function" ? activeInquiry.createdAt.toDate().toLocaleTimeString([], {hour: "2-digit", minute:"2-digit"}) : "Just now"}</p>
+                  </div>
+                </div>
+
+                {/* Admin's Reply */}
+                {activeInquiry.adminReply && (
+                  <div className="flex gap-2 items-start max-w-[85%] self-start text-left">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-800 text-white font-extrabold flex items-center justify-center shrink-0 text-xs">
+                      P
+                    </div>
+                    <div className="bg-emerald-100 text-emerald-950 p-3 rounded-2xl rounded-tl-xs shadow-xs border border-emerald-200">
+                      <p className="leading-relaxed font-semibold">{activeInquiry.adminReply}</p>
+                      <p className="text-[9px] text-emerald-950/50">Palicon Support • {activeInquiry.repliedAt && typeof activeInquiry.repliedAt.toDate === "function" ? activeInquiry.repliedAt.toDate().toLocaleTimeString([], {hour: "2-digit", minute:"2-digit"}) : "Just now"}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Typing Indicator */}
+            <AnimatePresence>
+              {activeInquiry?.adminTyping && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="flex gap-2 items-start max-w-[85%] self-start text-left"
+                >
+                  <div className="w-7 h-7 rounded-lg bg-emerald-800 text-white font-bold flex items-center justify-center shrink-0 text-xs">
+                    P
+                  </div>
+                  <div className="bg-slate-200 text-slate-800 p-3 rounded-2xl rounded-tl-xs shadow-xs border border-slate-300 flex flex-col gap-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] font-semibold text-emerald-950 animate-pulse">Palicon is typing</span>
+                      <div className="flex gap-1 items-center pt-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-800 animate-bounce" style={{ animationDelay: "0ms" }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-800 animate-bounce" style={{ animationDelay: "150ms" }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-800 animate-bounce" style={{ animationDelay: "300ms" }} />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {errorMessage && (
               <div className="bg-rose-50 border border-rose-100 p-3 rounded-xl text-rose-700 text-[11px]">
@@ -194,8 +284,9 @@ export default function LiveChatWidget({ user, onSuccessMessage }: LiveChatWidge
             </div>
           </form>
 
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Floating Circle Button */}
       <button

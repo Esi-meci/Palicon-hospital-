@@ -64,6 +64,7 @@ export interface Inquiry {
   message: string;
   adminReply?: string;
   status: "pending" | "replied";
+  adminTyping?: boolean;
   createdAt: any; // Firestore Timestamp
   repliedAt?: any; // Firestore Timestamp
 }
