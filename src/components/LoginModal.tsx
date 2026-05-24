@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { X, Mail, User, ShieldCheck, Activity, LogIn } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { UserRole, UserProfile } from "../types";
-import { Timestamp, doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { Timestamp, doc, setDoc, getDoc } from "firebase/firestore";
+import { db, auth, googleProvider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
 
 interface LoginModalProps {
   onClose: () => void;
@@ -16,11 +17,12 @@ export default function LoginModal({
   onClose,
   onSuccess,
   onGoogleLoginTrigger,
-  isProcessingGoogle,
+  isProcessingGoogle: externalIsProcessing,
 }: LoginModalProps) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProcessingGoogle, setIsProcessingGoogle] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Derive a user's display name politely from email handle
@@ -71,15 +73,52 @@ export default function LoginModal({
     }
   };
 
-  const handleGoogleClick = async () => {
+  const handleGoogleClick = () => {
     setErrorMsg(null);
-    try {
-      await onGoogleLoginTrigger();
-    } catch (err: any) {
-      console.warn("Google Authentication error:", err);
-      setErrorMsg("Google Sign-up failed or was blocked. You can still login immediately using the simple Email sign-in form below!");
-    }
+    setIsProcessingGoogle(true);
+
+    // CRITICAL DESIGN DECISION FOR MAXIMUM SECURITY & REUSABILITY:
+    // Execute signInWithPopup strictly synchronously on the first tick of the event stack.
+    // This allows modern browser popup-blockers and frame security policies to recognize
+    // this as a direct product of user action, completely bypassing standard iframe blocking.
+    signInWithPopup(auth, googleProvider)
+      .then(async (result) => {
+        const userObj = result.user;
+        const userDocRef = doc(db, "users", userObj.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        let finalProfile: UserProfile;
+        if (userDocSnap.exists()) {
+          finalProfile = userDocSnap.data() as UserProfile;
+        } else {
+          // Default Mercy Godwin email to Administrator, else Standard Patient
+          const role: UserRole = userObj.email === "gowinmercy@gmail.com" ? "admin" : "patient";
+          finalProfile = {
+            uid: userObj.uid,
+            name: userObj.displayName || "Patient",
+            email: userObj.email || "example@gmail.com",
+            role: role,
+            createdAt: Timestamp.now()
+          };
+          await setDoc(userDocRef, finalProfile);
+        }
+
+        localStorage.setItem("palicon_user_session", JSON.stringify(finalProfile));
+        onSuccess(finalProfile);
+      })
+      .catch((err: any) => {
+        console.warn("Google authentication warning (reverting):", err);
+        // Fallback message with clear diagnostic guidelines for sandboxed browsers:
+        setErrorMsg(
+          "Google Sign-up was interrupted. If you are experiencing extensions or browser blocks, feel free to use standard email login form above!"
+        );
+      })
+      .finally(() => {
+        setIsProcessingGoogle(false);
+      });
   };
+
+  const isGoogleActive = isProcessingGoogle || externalIsProcessing;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -123,7 +162,7 @@ export default function LoginModal({
           <div className="space-y-2">
             <button
               onClick={handleGoogleClick}
-              disabled={isSubmitting || isProcessingGoogle}
+              disabled={isSubmitting || isGoogleActive}
               id="google-login-action-btn"
               className="w-full py-3 px-4 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs disabled:opacity-50"
             >
@@ -145,7 +184,7 @@ export default function LoginModal({
                    d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.66-2.84c-1.01.68-2.31 1.09-3.9 1.09-3.09 0-5.73-2.37-6.64-5.38L1.89 15.9c1.91 3.77 5.86 6.42 10.51 6.42z"
                 />
               </svg>
-              {isProcessingGoogle ? "Opening Google..." : "SignUp with google"}
+              {isGoogleActive ? "Opening Google..." : "SignUp with google"}
             </button>
           </div>
 
@@ -182,7 +221,7 @@ export default function LoginModal({
                 <User className="absolute left-3 top-3.5 w-4 h-4 text-emerald-800/40" />
                 <input
                   type="text"
-                  placeholder="e.g. Mercy Godwin"
+                  placeholder="e.g. John Doe"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-3 text-xs sm:text-sm focus:outline-hidden focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-medium"
@@ -194,7 +233,7 @@ export default function LoginModal({
             {/* Submit Action */}
             <button
               type="submit"
-              disabled={isSubmitting || isProcessingGoogle}
+              disabled={isSubmitting || isGoogleActive}
               id="login-passwordless-submit-btn"
               className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-xs disabled:opacity-50 inline-flex items-center justify-center gap-1.5"
             >
