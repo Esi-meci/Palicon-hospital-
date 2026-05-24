@@ -72,7 +72,7 @@ export default function Navbar({
               ))}
 
               {/* Portal / Dashboard Access Shortcut */}
-              {user && (
+              {user && currentView !== "dashboard" && (
                 <button
                   onClick={() => setView("dashboard")}
                   id="nav-link-portal"
@@ -175,7 +175,7 @@ export default function Navbar({
                 className="inline-flex items-center gap-1.5 px-4 h-10 rounded-xl bg-emerald-600 text-white font-semibold text-sm hover:bg-emerald-700 transition-all duration-200 shadow-sm shadow-emerald-200 cursor-pointer"
               >
                 <LogIn className="w-4 h-4" />
-                Secure Portal
+                Login/SignUp
               </button>
             )}
           </div>
@@ -213,7 +213,7 @@ export default function Navbar({
             </button>
           ))}
 
-          {user && (
+          {user && currentView !== "dashboard" && (
             <button
               onClick={() => {
                 setView("dashboard");
@@ -269,7 +269,7 @@ export default function Navbar({
                 className="w-full inline-flex items-center justify-center gap-1.5 py-3 rounded-xl bg-emerald-600 text-white font-semibold text-base shadow-sm hover:bg-emerald-700"
               >
                 <LogIn className="w-5 h-5" />
-                Sign In / Register
+                Login/SignUp
               </button>
             )}
           </div>

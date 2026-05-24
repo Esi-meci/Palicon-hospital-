@@ -606,12 +606,12 @@ export default function App() {
           )}
 
           {currentView === "dashboard" && !userProfile && (
-            <div className="py-24 max-w-md mx-auto px-4 text-center space-y-4">
+            <div className="py-24 max-w-sm mx-auto px-4 text-center space-y-4">
               <ShieldAlert className="w-12 h-12 text-emerald-700 mx-auto" strokeWidth={1.5} />
               <div className="space-y-3">
                 <h2 className="text-xl font-sans font-bold text-emerald-950">Patient Admission Gate Locked</h2>
                 <p className="text-sm text-emerald-900/60 leading-relaxed font-sans">
-                  Please authenticate with your secure clinical login card or enter customize credentials to manage medical bookings.
+                  Please log in with your email or Google account to unlock and access your secure personalized patient profile and clinical data vault.
                 </p>
                 <button
                   onClick={handleLogin}
@@ -620,32 +620,6 @@ export default function App() {
                 >
                   🔒 Unlock Smart Login Gate
                 </button>
-              </div>
-
-              {/* Developer Environment Preset Selectors */}
-              <div className="bg-white p-5 rounded-2xl border border-emerald-100 shadow-xs space-y-3 mt-6">
-                <div className="text-[10px] text-emerald-900/40 uppercase tracking-widest font-mono font-bold">
-                  Quick Developer Preset Access
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => handleSimulatedLogin("patient")}
-                    id="simulate-patient-btn"
-                    className="inline-flex justify-center items-center gap-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer"
-                  >
-                    Simulate Patient
-                  </button>
-                  <button
-                    onClick={() => handleSimulatedLogin("admin")}
-                    id="simulate-admin-btn"
-                    className="inline-flex justify-center items-center gap-1 bg-emerald-800 hover:bg-emerald-950 text-white py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer"
-                  >
-                    Simulate Admin
-                  </button>
-                </div>
-                <div className="text-[10px] text-emerald-900/40 leading-relaxed font-sans">
-                  *Quick access profiles simulate full role permissions dynamically using live Firestore document indexing.
-                </div>
               </div>
             </div>
           )}
