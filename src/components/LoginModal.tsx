@@ -107,11 +107,21 @@ export default function LoginModal({
         onSuccess(finalProfile);
       })
       .catch((err: any) => {
-        console.warn("Google authentication warning (reverting):", err);
-        // Fallback message with clear diagnostic guidelines for sandboxed browsers:
-        setErrorMsg(
-          "Google Sign-up was interrupted. If you are experiencing extensions or browser blocks, feel free to use standard email login form above!"
-        );
+        console.error("Google authentication error:", err);
+        const errorCode = err.code || "unknown-code";
+        const errorMessage = err.message || "An unexpected error occurred.";
+        
+        let friendlyMessage = "";
+        if (errorCode === "auth/unauthorized-domain") {
+          friendlyMessage = `Firebase Domain Error (unauthorized-domain): This preview URL's domain (${window.location.hostname}) is not listed in your Firebase Authorized Domains. Please add it in your Firebase Console under Authentication -> Settings -> Authorized Domains to allow Google Login! You can still sign up instantly with the standard email form below.`;
+        } else if (errorCode === "auth/popup-blocked") {
+          friendlyMessage = `Google Sign-Up popup was blocked by your browser. Please authorize popups for this site, or use the standard email sign-in form below.`;
+        } else if (errorCode === "auth/operation-not-allowed") {
+          friendlyMessage = `Google Sign-In is not enabled as a provider in your Firebase project. Please enable Google Sign-In under Authentication -> Sign-In Method in Firebase! You can still sign up instantly with the standard email form below.`;
+        } else {
+          friendlyMessage = `${errorMessage} (Error Code: ${errorCode}). You can still sign up instantly with the standard email form below!`;
+        }
+        setErrorMsg(friendlyMessage);
       })
       .finally(() => {
         setIsProcessingGoogle(false);

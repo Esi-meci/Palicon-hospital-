@@ -285,40 +285,6 @@ export default function App() {
     }
   };
 
-  // Helper simulated Login option for Quick Testing inside sandboxed environments
-  const handleSimulatedLogin = async (role: UserRole) => {
-    try {
-      setLoading(true);
-      setGlobalError(null);
-      // Simulate by generating a stable UID in state
-      const simulatedEmail = role === "admin" ? "gowinmercy@gmail.com" : "simulated.patient@palicon.org";
-      const simulatedName = role === "admin" ? "Mercy Godwin (Admin)" : "Simulated Patient Care";
-      const mockUid = role === "admin" ? "admin-demo-uid-999" : "patient-demo-uid-101";
-
-      const mockProfile: UserProfile = {
-        uid: mockUid,
-        name: simulatedName,
-        email: simulatedEmail,
-        role: role,
-        createdAt: Timestamp.now()
-      };
-
-      // Write user profile directly to database to allow query sync to function fully
-      const mockUserRef = doc(db, "users", mockUid);
-      await setDoc(mockUserRef, mockProfile);
-      
-      setUserProfile(mockProfile);
-      localStorage.setItem("palicon_user_session", JSON.stringify(mockProfile));
-      setView("dashboard");
-      triggerSuccessBanner(`Demo Mode Active : Authenticated as ${role.toUpperCase()}`);
-    } catch (err) {
-      console.error("Error setting up simulated dashboard profile", err);
-      setGlobalError("Simulated registration error.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Handle saving booked appointment from modal
   const handleConfirmBooking = async (details: { date: string; time: string; notes: string }) => {
     if (!userProfile || !bookingDoctor) {
