@@ -142,16 +142,18 @@ export default function Navbar({
                       </div>
 
                       {/* View dashboard portal shortcut link */}
-                      <button
-                        onClick={() => {
-                          setView("dashboard");
-                          setShowDropdown(false);
-                        }}
-                        className="w-full px-4 py-2.5 text-left text-xs font-bold text-emerald-950 hover:bg-emerald-50/70 flex items-center gap-2 cursor-pointer transition-colors"
-                      >
-                        <Calendar className="w-4 h-4 text-emerald-600 shrink-0" />
-                        {user.role === "admin" ? "Open Administration Hub" : "View My Patient Portal"}
-                      </button>
+                      {currentView !== "dashboard" && (
+                        <button
+                          onClick={() => {
+                            setView("dashboard");
+                            setShowDropdown(false);
+                          }}
+                          className="w-full px-4 py-2.5 text-left text-xs font-bold text-emerald-950 hover:bg-emerald-50/70 flex items-center gap-2 cursor-pointer transition-colors"
+                        >
+                          <Calendar className="w-4 h-4 text-emerald-600 shrink-0" />
+                          {user.role === "admin" ? "Open Administration Hub" : "View My Patient Portal"}
+                        </button>
+                      )}
 
                       {/* Log out option */}
                       <button

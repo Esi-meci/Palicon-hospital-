@@ -25,6 +25,15 @@ export default function LoginModal({
   const [isProcessingGoogle, setIsProcessingGoogle] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // Detect if running inside an iframe workspace
+  const isInsideIframe = (() => {
+    try {
+      return window.self !== window.top;
+    } catch (e) {
+      return true;
+    }
+  })();
+
   // Derive a user's display name politely from email handle
   const deriveNameFromEmail = (emailStr: string) => {
     const part = emailStr.split("@")[0] || "User";
@@ -196,6 +205,20 @@ export default function LoginModal({
               </svg>
               {isGoogleActive ? "Opening Google..." : "SignUp with google"}
             </button>
+
+            {isInsideIframe && (
+              <div className="bg-amber-50/80 border border-amber-200/50 p-3 rounded-xl text-amber-900 text-[10px] leading-relaxed font-sans">
+                ⚠️ <strong className="font-bold">Preview Environment Note:</strong> Browser policies block third-party Google Authentication cookies within nested iframes. 
+                <a
+                  href={window.location.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-emerald-800 underline font-bold mt-1 hover:text-emerald-950 block"
+                >
+                  Click here to load Palicon Hospital in a New Tab and sign up using Google instantly!
+                </a>
+              </div>
+            )}
           </div>
 
           {/* Simple OR Divider */}
