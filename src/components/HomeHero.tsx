@@ -63,7 +63,7 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
             <div className="space-y-6 sm:max-w-xl lg:max-w-none">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-100/50">
                 <Activity className="w-4 h-4 text-emerald-600 animate-pulse" />
-                <span className="text-xs font-semibold font-mono tracking-wider uppercase">Zero-Trust Clinical Portal</span>
+                <span className="text-xs font-semibold font-mono tracking-wider uppercase">Zero-Trust Medical Care</span>
               </div>
               
               <h1 className="font-sans font-extrabold text-4xl sm:text-5xl tracking-tight text-emerald-950 leading-tight">
@@ -72,7 +72,7 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
               </h1>
               
               <p className="font-sans text-base sm:text-lg text-emerald-900/60 leading-relaxed">
-                Welcome to Palicon Hospital Clinical Portal. Book secure real-time appointments, review private medical diagnoses, and get intelligent health briefs securely synchronized in our cloud-fortified vault.
+                Welcome to Palicon Hospital. Book secure real-time appointments, review private medical diagnoses, and get intelligent health briefs securely synchronized in our cloud-fortified vault.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-3">
