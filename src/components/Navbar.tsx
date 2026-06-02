@@ -55,7 +55,7 @@ export default function Navbar({
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-0.5 lg:space-x-1">
+            <div className="hidden lg:flex items-center space-x-0.5 lg:space-x-1">
               {navItems.map((item) => (
                 <button
                   key={item.id}
@@ -90,7 +90,7 @@ export default function Navbar({
           </div>
 
           {/* User Sign In/Profile Area */}
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden lg:flex items-center space-x-3">
             {(!user || user.role !== "admin") && (
               <button
                 onClick={onBookClick}
@@ -183,7 +183,7 @@ export default function Navbar({
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center md:hidden">
+          <div className="flex items-center lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-xl text-emerald-950 hover:bg-emerald-50 cursor-pointer"
@@ -197,7 +197,7 @@ export default function Navbar({
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white px-2 pt-2 pb-4 space-y-1 border-t border-emerald-50 shadow-inner">
+        <div className="lg:hidden bg-white px-2 pt-2 pb-4 space-y-1 border-t border-emerald-50 shadow-inner">
           {navItems.map((item) => (
             <button
               key={item.id}

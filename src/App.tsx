@@ -40,7 +40,7 @@ import LiveChatWidget from "./components/LiveChatWidget";
 import LoginModal from "./components/LoginModal";
 
 // Lucide icon for local display alerts
-import { Sparkles, Activity, ShieldAlert, BadgeCheck, Phone, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Sparkles, Activity, ShieldAlert, BadgeCheck, Phone, Facebook, Twitter, Instagram, Linkedin, HeartPulse } from "lucide-react";
 import { motion } from "motion/react";
 
 export default function App() {
@@ -664,14 +664,15 @@ export default function App() {
               <p className="text-xs text-emerald-200/80 leading-relaxed font-sans">
                 1 Popoola Odusami Street, Balogun Lane, Abule Folly, Lagos 105101, Lagos, Nigeria
               </p>
-              <div className="space-y-1.5 text-xs text-emerald-200/80 font-sans">
+              <div className="space-y-2 text-xs text-emerald-200/80 font-sans">
                 <div className="flex items-center gap-1.5">
                   <span className="font-bold">Contact Hotline:</span>
                   <a href="tel:+2348072606299" className="hover:text-emerald-400 font-mono">+234 807 260 6299</a>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="font-bold">Emergency Core Desk:</span>
-                  <span className="text-rose-400 font-bold uppercase font-mono">24 Hours / 7 Days Active</span>
+                <div className="flex items-center gap-2 text-rose-450 hover:text-rose-400 transition-colors">
+                  <HeartPulse className="w-4 h-4 text-rose-500 animate-pulse shrink-0" />
+                  <span className="font-bold">Clinical Emergency Line:</span>
+                  <a href="tel:+2348072606299" className="font-mono text-rose-400 font-bold hover:underline">+234 807 260 6299</a>
                 </div>
                 <div className="pt-2 text-[10px] text-emerald-200/50">
                   <span className="font-bold uppercase font-mono h-fit inline-block border border-emerald-800 rounded bg-emerald-950/50 px-1 py-0.5 mr-1 text-emerald-450">

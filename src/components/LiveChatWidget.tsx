@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MessageSquare, X, Send, BadgeCheck, ShieldAlert, Sparkles, Phone } from "lucide-react";
+import { MessageSquare, X, Send, BadgeCheck, ShieldAlert, Sparkles, Phone, HeartPulse } from "lucide-react";
 import { collection, doc, setDoc, query, where, onSnapshot, Timestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { UserProfile } from "../types";
@@ -136,9 +136,12 @@ export default function LiveChatWidget({ user, onSuccessMessage }: LiveChatWidge
           </div>
 
           {/* Quick Notice Banner */}
-          <div className="bg-emerald-50 text-[10px] sm:text-xs text-emerald-950 px-4 py-2 font-semibold flex items-center gap-1.5 border-b border-emerald-100 shrink-0 select-none">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span>Need immediate triage? Phone calls are available 24/7.</span>
+          <div className="bg-rose-50 text-[10px] sm:text-xs text-rose-950 px-4 py-2 font-bold flex items-center justify-between gap-1.5 border-b border-rose-100 shrink-0 select-none">
+            <div className="flex items-center gap-1.5">
+              <HeartPulse className="w-3.5 h-3.5 text-rose-600 shrink-0 animate-pulse" />
+              <span>Emergency Hotline:</span>
+            </div>
+            <a href="tel:+2348072606299" className="text-rose-600 hover:underline font-mono font-black">+234 807 260 6299</a>
           </div>
 
           {/* Chat Body Scroll */}

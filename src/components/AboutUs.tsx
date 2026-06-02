@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ShieldCheck, HeartPulse, UserCheck, Star, Sparkles, ChevronDown, ChevronUp, History, Network } from "lucide-react";
+import TestimonialsSection from "./TestimonialsSection";
 
 interface FAQItem {
   question: string;
@@ -39,7 +40,7 @@ export default function AboutUs() {
   const faqs: FAQItem[] = [
     {
       question: "Where is Palicon Hospital located?",
-      answer: "We are situated in Lagos at 1 Popoola Odusami Street, Balogun Lane, Abule Folly, Lagos 105101, Lagos State, Nigeria. Our facility features ample parking space, physical access control, and 24/7 security."
+      answer: "We are situated in Lagos at PALICON HOSPITAL (1 Popoola Odusami Street, Balogun Lane, Abule Folly, Lagos 105101, Lagos State, Nigeria). You can view our exact spot on Google Maps at https://maps.app.goo.gl/fFxvqoR8BGFxkPf29. Our facility features ample parking space, physical access control, and 24/7 security."
     },
     {
       question: "What are your business and consulting hours?",
@@ -208,6 +209,9 @@ export default function AboutUs() {
             })}
           </div>
         </div>
+
+        {/* Testimonials Block */}
+        <TestimonialsSection />
 
       </div>
     </div>

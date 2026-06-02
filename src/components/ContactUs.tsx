@@ -114,8 +114,16 @@ export default function ContactUs({ onSuccessMessage }: ContactUsProps) {
                   <div>
                     <h4 className="text-xs font-bold text-emerald-950 font-sans uppercase tracking-wider font-mono">Hospital Address</h4>
                     <p className="text-xs text-emerald-900/60 leading-relaxed font-sans mt-0.5">
-                      1 Popoola Odusami Street, Balogun Lane, Abule Folly, Lagos 105101, Lagos, Nigeria
+                      PALICON HOSPITAL, 1 Popoola Odusami Street, Balogun Lane, Abule Folly, Lagos 105101, Lagos, Nigeria
                     </p>
+                    <a 
+                      href="https://maps.app.goo.gl/fFxvqoR8BGFxkPf29"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 hover:text-emerald-950 underline mt-2 transition-colors cursor-pointer"
+                    >
+                      🗺️ Open Google Maps &rarr;
+                    </a>
                   </div>
                 </div>
 
@@ -167,7 +175,7 @@ export default function ContactUs({ onSuccessMessage }: ContactUsProps) {
             <div className="bg-white p-3 rounded-3xl border border-emerald-50 shadow-sm overflow-hidden h-64 relative">
               <iframe
                 title="Palicon Hospital Map"
-                src="https://maps.google.com/maps?q=1%20Popoola%20Odusami%20Street,%20Balogun%20Lane,%20Abule%20Folly,%20Lagos,%20Nigeria&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                src="https://maps.google.com/maps?q=PALICON%20HOSPITAL,%201%20Popoola%20Odusami%20Street,%20Lagos,%20Nigeria&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 className="w-full h-full rounded-2xl border-0"
                 allowFullScreen
                 loading="lazy"

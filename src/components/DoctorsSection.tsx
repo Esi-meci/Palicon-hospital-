@@ -133,7 +133,7 @@ export default function DoctorsSection({
                     <SafeDoctorImage 
                       src={doc.image} 
                       name={doc.name} 
-                      className="absolute inset-0 w-full h-full object-cover opacity-85"
+                      className="absolute inset-0 w-full h-full object-cover opacity-100"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent pointer-events-none" />
                     

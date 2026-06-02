@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import { getFirestore, doc, getDocFromServer, setLogLevel } from 'firebase/firestore';
 import defaultFirebaseConfig from '../firebase-applet-config.json';
 
 // Support VITE_ environment variable overrides for custom hosting environments like Vercel
@@ -25,6 +25,14 @@ export const db = getFirestore(
     ? undefined 
     : firebaseConfig.firestoreDatabaseId
 );
+
+// Suppress internal connection failure warnings in offline/sandbox environments
+try {
+  setLogLevel('error');
+} catch (e) {
+  // Ignore fallback error
+}
+
 export const auth = getAuth();
 export const googleProvider = new GoogleAuthProvider();
 
@@ -33,8 +41,16 @@ async function testConnection() {
   try {
     await getDocFromServer(doc(db, 'test', 'connection'));
   } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.error("Please check your Firebase configuration or network status.");
+    if (error instanceof Error) {
+      const isOfflineOrUnavailable = 
+        error.message.includes('the client is offline') || 
+        error.message.includes('unavailable') || 
+        (error as any).code === 'unavailable';
+      if (isOfflineOrUnavailable) {
+        console.warn("Firebase configuration/network check status: Operating in offline mode with cached access.");
+      } else {
+        console.warn("Firebase configuration/network check status details:", error.message);
+      }
     }
   }
 }

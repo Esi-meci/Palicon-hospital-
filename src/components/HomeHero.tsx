@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { 
-  ShieldCheck, Award, HeartHandshake, Phone, ArrowRight, Activity, CalendarClock, ChevronLeft, ChevronRight 
+  ShieldCheck, Award, HeartHandshake, Phone, ArrowRight, Activity, CalendarClock, ChevronLeft, ChevronRight, HeartPulse 
 } from "lucide-react";
+import TestimonialsSection from "./TestimonialsSection";
 
 interface HomeHeroProps {
   onBookNow: () => void;
@@ -114,8 +115,7 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
 
             {/* Right Column Banner Graphic inside Card with Interactive Carousel */}
             <div className="relative">
-              <div className="absolute -inset-1.5 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-3xl blur-lg opacity-35" />
-              <div className="relative bg-emerald-900 rounded-3xl overflow-hidden shadow-2xl border border-emerald-800">
+              <div className="relative bg-emerald-950 rounded-3xl overflow-hidden shadow-2xl border border-emerald-850">
                 
                 {/* Carousel Image Plate */}
                 <div className="relative h-64 sm:h-80 w-full overflow-hidden bg-slate-900">
@@ -130,10 +130,8 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                         src={slide.url}
                         alt={slide.title}
                         referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover brightness-[0.85]"
+                        className="w-full h-full object-cover opacity-100"
                       />
-                      {/* Dark gradient overlay on bottom */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/30 to-transparent" />
                     </div>
                   ))}
 
@@ -186,14 +184,14 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                     {carouselImages[currentSlide].desc}
                   </p>
 
-                  <div className="bg-emerald-950/40 rounded-xl p-4 border border-emerald-800/50 space-y-3">
+                  <div className="bg-rose-950/40 rounded-xl p-4 border border-rose-500/30 space-y-3">
                     <div className="flex items-center gap-3">
-                      <div className="bg-emerald-500/20 text-emerald-300 p-2 rounded-lg">
-                        <Phone className="w-5 h-5" />
+                      <div className="bg-rose-600 text-white p-2 rounded-lg animate-pulse">
+                        <HeartPulse className="w-5 h-5" />
                       </div>
                       <div>
-                        <div className="text-[10px] text-emerald-300 uppercase tracking-wider font-mono font-semibold">Emergency Helpline</div>
-                        <div className="text-sm font-bold font-mono">+234 807 260 6299</div>
+                        <div className="text-[10px] text-rose-300 uppercase tracking-widest font-mono font-bold">24/7 Clinical Emergency Line</div>
+                        <a href="tel:+2348072606299" className="text-sm font-black font-mono text-rose-400 hover:text-rose-300 block transition-colors">+234 807 260 6299</a>
                       </div>
                     </div>
                   </div>
@@ -226,17 +224,22 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                 src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=400&auto=format&fit=crop"
                 alt="Accredited Staff"
                 referrerPolicy="no-referrer"
-                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500"
+                className="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/45 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent pointer-events-none" />
               
               {/* Floating glassmorphic badge */}
               <div className="absolute top-4 left-4 z-10 w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md text-emerald-300 flex items-center justify-center border border-white/15 shadow-xs">
                 <Award className="w-5 h-5 text-emerald-200" />
               </div>
-              <div className="absolute bottom-4 left-4 z-10">
-                <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest font-mono">Verified Team</span>
-                <h4 className="text-lg font-extrabold text-white font-sans mt-0.5">Accredited Staff</h4>
+              
+              <div className="relative p-4 z-10 w-full h-full flex items-end">
+                <div>
+                  <span className="bg-emerald-600 text-white px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider font-mono">
+                    Verified Team
+                  </span>
+                  <h3 className="text-base font-bold text-white mt-1 font-sans">Accredited Staff</h3>
+                </div>
               </div>
             </div>
             
@@ -254,17 +257,22 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                 src="https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=400&auto=format&fit=crop"
                 alt="Secure Patients Vault"
                 referrerPolicy="no-referrer"
-                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500"
+                className="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/45 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent pointer-events-none" />
               
               {/* Floating glassmorphic badge */}
               <div className="absolute top-4 left-4 z-10 w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md text-emerald-300 flex items-center justify-center border border-white/15 shadow-xs">
                 <ShieldCheck className="w-5 h-5 text-emerald-200" />
               </div>
-              <div className="absolute bottom-4 left-4 z-10">
-                <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest font-mono">Zero-Trust Security</span>
-                <h4 className="text-lg font-extrabold text-white font-sans mt-0.5">Secure Patients Vault</h4>
+              
+              <div className="relative p-4 z-10 w-full h-full flex items-end">
+                <div>
+                  <span className="bg-emerald-600 text-white px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider font-mono">
+                    Zero-Trust Security
+                  </span>
+                  <h3 className="text-base font-bold text-white mt-1 font-sans">Secure Patients Vault</h3>
+                </div>
               </div>
             </div>
             
@@ -282,17 +290,22 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                 src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?q=80&w=400&auto=format&fit=crop"
                 alt="Compassionate Care"
                 referrerPolicy="no-referrer"
-                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500"
+                className="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/45 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent pointer-events-none" />
               
               {/* Floating glassmorphic badge */}
               <div className="absolute top-4 left-4 z-10 w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md text-emerald-300 flex items-center justify-center border border-white/15 shadow-xs">
                 <HeartHandshake className="w-5 h-5 text-emerald-200" />
               </div>
-              <div className="absolute bottom-4 left-4 z-10">
-                <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest font-mono">Holistic Support</span>
-                <h4 className="text-lg font-extrabold text-white font-sans mt-0.5">Compassionate Care</h4>
+              
+              <div className="relative p-4 z-10 w-full h-full flex items-end">
+                <div>
+                  <span className="bg-emerald-600 text-white px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider font-mono">
+                    Holistic Support
+                  </span>
+                  <h3 className="text-base font-bold text-white mt-1 font-sans">Compassionate Care</h3>
+                </div>
               </div>
             </div>
             
@@ -343,6 +356,9 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
           </div>
         </div>
       </section>
+
+      {/* Testimonials Block */}
+      <TestimonialsSection />
 
     </div>
   );
