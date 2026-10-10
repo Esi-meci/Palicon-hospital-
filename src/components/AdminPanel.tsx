@@ -500,9 +500,19 @@ export default function AdminPanel({
                 >
                   <div className="flex items-center gap-4">
                     <img 
-                      src={doc.image} 
+                      src={doc.image.startsWith("/") ? encodeURI(doc.image) : doc.image} 
                       alt={doc.name} 
                       referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const isFemale = doc.name.toLowerCase().includes("nurse") ||
+                                         doc.name.toLowerCase().includes("rosemary") ||
+                                         doc.name.toLowerCase().includes("niniola") ||
+                                         doc.name.toLowerCase().includes("treasure") ||
+                                         doc.name.toLowerCase().includes("ngozi");
+                        (e.target as HTMLImageElement).src = isFemale
+                          ? "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop"
+                          : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop";
+                      }}
                       className="w-12 h-12 object-cover rounded-xl border border-emerald-100"
                     />
                     <div>

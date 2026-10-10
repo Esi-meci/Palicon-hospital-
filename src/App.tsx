@@ -83,7 +83,13 @@ export default function App() {
         } else {
           const list: Doctor[] = [];
           snapshot.forEach((doc) => {
-            list.push(doc.data() as Doctor);
+            const docData = doc.data() as Doctor;
+            const seedMatch = INITIAL_DOCTORS.find((d) => d.id === docData.id);
+            if (seedMatch && (docData.id === "doc-1" || docData.id === "doc-2" || docData.id === "doc-3")) {
+              list.push(seedMatch);
+            } else {
+              list.push(docData);
+            }
           });
           setDoctors(list);
         }

@@ -1,12 +1,13 @@
 import React from "react";
 import { 
-  Stethoscope, Heart, Baby, Bone, Sparkles, ArrowRight, CheckCircle2, Scissors, Ambulance, FlaskConical, Activity, Check, ShieldAlert, BadgeInfo, ChevronLeft, ChevronRight
+  Stethoscope, Heart, Baby, Bone, Sparkles, ArrowRight, CheckCircle2, Scissors, Ambulance, FlaskConical, Activity, Check, ShieldAlert, BadgeInfo, ChevronLeft, ChevronRight, HeartHandshake
 } from "lucide-react";
 import { DEPARTMENTS } from "../data";
 import { Department } from "../types";
 
 // Icon components mapping
 const iconMap: Record<string, React.ComponentType<any>> = {
+  HeartHandshake: HeartHandshake,
   Stethoscope: Stethoscope,
   Heart: Heart,
   Baby: Baby,
@@ -19,6 +20,7 @@ const iconMap: Record<string, React.ComponentType<any>> = {
 };
 
 const deptImages: Record<string, string> = {
+  "NURSING": "/Nurse Ahmed Temitope Rosemary.jpeg",
   "OBSTETRICS AND GYNAECOLOGY": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=600&auto=format&fit=crop", // female obstetrician talking to patient
   "GENERAL SURGERY": "https://images.unsplash.com/photo-1579684389782-64d84b5e901a?q=80&w=600&auto=format&fit=crop", // surgical team in OR
   "PEDIATRICS": "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=600&auto=format&fit=crop", // smiling doctor checkup child

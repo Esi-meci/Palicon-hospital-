@@ -20,15 +20,25 @@ function SafeDoctorImage({ src, name, className }: { src: string; name: string; 
                    lowercaseName.includes("elena") || 
                    lowercaseName.includes("chloe") ||
                    lowercaseName.includes("yusuf") ||
-                   lowercaseName.includes("achebe");
+                   lowercaseName.includes("achebe") ||
+                   lowercaseName.includes("nurse") ||
+                   lowercaseName.includes("rosemary") ||
+                   lowercaseName.includes("niniola") ||
+                   lowercaseName.includes("treasure") ||
+                   lowercaseName.includes("temitope") ||
+                   lowercaseName.includes("olaogun") ||
+                   lowercaseName.includes("ogochukwu") ||
+                   lowercaseName.includes("ahmed");
                    
   const fallbackUrl = isFemale 
     ? "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop"
     : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop";
 
+  const resolvedSrc = src.startsWith("/") ? encodeURI(src) : src;
+
   return (
     <img 
-      src={hasError ? fallbackUrl : src} 
+      src={hasError ? fallbackUrl : resolvedSrc} 
       alt={name} 
       referrerPolicy="no-referrer"
       onError={() => setHasError(true)}
@@ -45,7 +55,10 @@ export default function DoctorsSection({
 }: DoctorsSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const specialties = ["All", ...DEPARTMENTS.map((d) => d.name)];
+  const specialties = [
+    "All",
+    ...Array.from(new Set([...DEPARTMENTS.map((d) => d.name), ...doctors.map((d) => d.specialty)]))
+  ];
 
   const filteredDoctors = doctors.filter((doc) => {
     const matchesSpecialty = 

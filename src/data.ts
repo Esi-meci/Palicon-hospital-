@@ -2,6 +2,12 @@ import { Doctor, Department } from "./types";
 
 export const DEPARTMENTS: Department[] = [
   {
+    name: "NURSING",
+    icon: "HeartHandshake",
+    description: "Dedicated patient clinical nursing, continuous bedside care, post-surgical observation, wound dressing, vitals triage, and medication administration.",
+    symptoms: ["Wound Dressing", "Medication Injections", "Post-Surgical Nursing", "Vitals Assessment", "Bedside Monitoring"]
+  },
+  {
     name: "OBSTETRICS AND GYNAECOLOGY",
     icon: "Baby",
     description: "Comprehensive prenatal care, general wellness, childbirth services, reproductive healthcare, and surgical gynaecological treatments.",
@@ -60,36 +66,36 @@ export const DEPARTMENTS: Department[] = [
 export const INITIAL_DOCTORS: Doctor[] = [
   {
     id: "doc-1",
-    name: "Dr. Olusegun Bello",
-    specialty: "ACCIDENT AND EMMERGENCY",
+    name: "Nurse Ahmed Temitope Rosemary",
+    specialty: "NURSING",
     rating: 4.9,
     experience: "14 Years",
-    fees: 15000,
-    image: "https://images.unsplash.com/photo-1550831107-1553da8c8464?q=80&w=256&auto=format&fit=crop",
-    availability: "Mon, Wed, Fri (9:00 AM - 1:00 PM)",
-    email: "olusegun.bello@paliconhospital.org"
+    fees: 10000,
+    image: "/Nurse Ahmed Temitope Rosemary.jpeg",
+    availability: "Mon, Wed, Fri (8:00 AM - 2:00 PM)",
+    email: "ahmed.rosemary@paliconhospital.org"
   },
   {
     id: "doc-2",
-    name: "Dr. Ngozi Achebe",
-    specialty: "PEDIATRICS",
+    name: "Nurse Olaogun Niniola",
+    specialty: "NURSING",
     rating: 4.8,
     experience: "10 Years",
-    fees: 11000,
-    image: "https://images.unsplash.com/photo-1651008011206-43c3919babcf?q=80&w=256&auto=format&fit=crop",
-    availability: "Tue, Thu (10:00 AM - 4:00 PM)",
-    email: "ngozi.achebe@paliconhospital.org"
+    fees: 9500,
+    image: "/Nurse Olaogun Niniola.jpeg",
+    availability: "Tue, Thu, Sat (8:00 AM - 3:00 PM)",
+    email: "olaogun.niniola@paliconhospital.org"
   },
   {
     id: "doc-3",
-    name: "Dr. Emeka Okafor",
-    specialty: "GENERAL SURGERY",
+    name: "Nurse Ogochukwu Treasure",
+    specialty: "NURSING",
     rating: 5.0,
-    experience: "18 Years",
-    fees: 18000,
-    image: "https://images.unsplash.com/photo-1631215534059-400c2858b4f3?q=80&w=256&auto=format&fit=crop",
-    availability: "Mon, Thu (1:00 PM - 5:00 PM)",
-    email: "emeka.okafor@paliconhospital.org"
+    experience: "12 Years",
+    fees: 11000,
+    image: "/Nurse Ogochukwu Treasure.jpeg",
+    availability: "Mon, Thu, Fri (9:00 AM - 4:00 PM)",
+    email: "ogochukwu.treasure@paliconhospital.org"
   },
   {
     id: "doc-4",

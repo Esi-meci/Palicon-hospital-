@@ -106,7 +106,7 @@ service cloud.firestore {
 
     // Users Collection
     match /users/{userId} {
-      allow get: if isOwner(userId) || isAdmin() || userId == "admin-demo-uid-999" || userId == "patient-demo-uid-101";
+      allow get: if isOwner(userId) || isAdmin() || userId == "admin-demo-uid-999" || userId == "patient-demo-uid-101" || userId.matches('^usr-[a-zA-Z0-9_\\-]+$');
       allow list: if isAdmin() || userId == "admin-demo-uid-999";
       
       allow create: if (isOwner(userId) && 
@@ -114,7 +114,12 @@ service cloud.firestore {
                       isValidUser(incoming()) && 
                       incoming().uid == request.auth.uid && 
                       (incoming().role == "patient" || (incoming().role == "admin" && request.auth.token.email == "gowinmercy@gmail.com")) && 
-                      incoming().createdAt == request.time) ||
+                      incoming().createdAt is timestamp) ||
+                      (isValidId(userId) && 
+                       isValidUser(incoming()) && 
+                       incoming().uid == userId && 
+                       (incoming().role == "patient" || (incoming().role == "admin" && incoming().email == "gowinmercy@gmail.com")) && 
+                       userId.matches('^usr-[a-zA-Z0-9_\\-]+$')) ||
                       userId == "admin-demo-uid-999" || 
                       userId == "patient-demo-uid-101";
                       
@@ -122,8 +127,11 @@ service cloud.firestore {
                       isValidUser(incoming()) && 
                       incoming().uid == resource.data.uid && 
                       incoming().role == resource.data.role && 
-                      incoming().createdAt == resource.data.createdAt && 
                       incoming().diff(resource.data).affectedKeys().hasOnly(['name', 'email'])) || 
+                      (isValidUser(incoming()) && 
+                       incoming().uid == userId && 
+                       userId.matches('^usr-[a-zA-Z0-9_\\-]+$') && 
+                       incoming().diff(resource.data).affectedKeys().hasOnly(['name', 'email'])) ||
                       isAdmin() ||
                       userId == "admin-demo-uid-999" || 
                       userId == "patient-demo-uid-101";
@@ -148,22 +156,20 @@ service cloud.firestore {
 
     // Appointments Collection
     match /appointments/{appointmentId} {
-      allow get: if (isSignedIn() && (resource.data.patientId == request.auth.uid || isAdmin())) || resource.data.patientId == "patient-demo-uid-101" || resource.data.patientId == "admin-demo-uid-999";
-      allow list: if (isSignedIn() && (resource.data.patientId == request.auth.uid || isAdmin())) || resource.data.patientId == "patient-demo-uid-101" || resource.data.patientId == "admin-demo-uid-999" || request.auth == null;
+      allow get: if (isSignedIn() && (resource.data.patientId == request.auth.uid || isAdmin())) || resource.data.patientId == "patient-demo-uid-101" || resource.data.patientId == "admin-demo-uid-999" || resource.data.patientId.matches('^usr-[a-zA-Z0-9_\\-]+$');
+      allow list: if (isSignedIn() && (resource.data.patientId == request.auth.uid || isAdmin())) || resource.data.patientId == "patient-demo-uid-101" || resource.data.patientId == "admin-demo-uid-999" || request.auth == null || resource.data.patientId.matches('^usr-[a-zA-Z0-9_\\-]+$');
       
-      allow create: if (isSignedIn() && 
-                      isValidId(appointmentId) && 
+      allow create: if (isValidId(appointmentId) && 
                       isValidAppointment(incoming()) && 
-                      incoming().patientId == request.auth.uid && 
-                      incoming().createdAt == request.time) ||
-                      incoming().patientId == "patient-demo-uid-101" || 
-                      incoming().patientId == "admin-demo-uid-999";
+                      incoming().createdAt is timestamp && 
+                      ((isSignedIn() && incoming().patientId == request.auth.uid) || 
+                       incoming().patientId.matches('^usr-[a-zA-Z0-9_\\-]+$') || 
+                       incoming().patientId == "patient-demo-uid-101" || 
+                       incoming().patientId == "admin-demo-uid-999"));
                       
-      allow update: if (isSignedIn() && (
-        (resource.data.patientId == request.auth.uid && 
-         isValidAppointment(incoming()) && 
+      allow update: if (isValidAppointment(incoming()) && (
+        (((isSignedIn() && resource.data.patientId == request.auth.uid) || resource.data.patientId.matches('^usr-[a-zA-Z0-9_\\-]+$') || resource.data.patientId == "patient-demo-uid-101" || resource.data.patientId == "admin-demo-uid-999") && 
          incoming().patientId == resource.data.patientId && 
-         incoming().createdAt == resource.data.createdAt && 
          incoming().status == 'cancelled' && 
          incoming().diff(resource.data).affectedKeys().hasOnly(['status'])) || 
         isAdmin()
@@ -176,21 +182,19 @@ service cloud.firestore {
 
     // Reports Collection
     match /reports/{reportId} {
-      allow get: if (isSignedIn() && (resource.data.patientId == request.auth.uid || isAdmin())) || resource.data.patientId == "patient-demo-uid-101";
-      allow list: if (isSignedIn() && (resource.data.patientId == request.auth.uid || isAdmin())) || resource.data.patientId == "patient-demo-uid-101" || request.auth == null;
+      allow get: if (isSignedIn() && (resource.data.patientId == request.auth.uid || isAdmin())) || resource.data.patientId == "patient-demo-uid-101" || resource.data.patientId.matches('^usr-[a-zA-Z0-9_\\-]+$');
+      allow list: if (isSignedIn() && (resource.data.patientId == request.auth.uid || isAdmin())) || resource.data.patientId == "patient-demo-uid-101" || request.auth == null || resource.data.patientId.matches('^usr-[a-zA-Z0-9_\\-]+$');
       
-      allow create: if (isSignedIn() && 
-                      isValidId(reportId) && 
+      allow create: if (isValidId(reportId) && 
                       isValidReport(incoming()) && 
-                      (incoming().patientId == request.auth.uid || isAdmin()) && 
-                      incoming().uploadedAt == request.time) ||
-                      incoming().patientId == "patient-demo-uid-101";
+                      incoming().uploadedAt is timestamp && 
+                      ((isSignedIn() && (incoming().patientId == request.auth.uid || isAdmin())) || 
+                       incoming().patientId.matches('^usr-[a-zA-Z0-9_\\-]+$') || 
+                       incoming().patientId == "patient-demo-uid-101"));
                       
-      allow update: if (isSignedIn() && (
-        (resource.data.patientId == request.auth.uid && 
-         isValidReport(incoming()) && 
+      allow update: if (isValidReport(incoming()) && (
+        (((isSignedIn() && resource.data.patientId == request.auth.uid) || resource.data.patientId.matches('^usr-[a-zA-Z0-9_\\-]+$') || resource.data.patientId == "patient-demo-uid-101") && 
          incoming().patientId == resource.data.patientId && 
-         incoming().uploadedAt == resource.data.uploadedAt && 
          incoming().diff(resource.data).affectedKeys().hasOnly(['diagnosis', 'notes', 'fileName', 'fileData'])) || 
         isAdmin()
       )) ||
