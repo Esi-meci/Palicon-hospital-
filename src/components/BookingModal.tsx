@@ -80,22 +80,38 @@ export default function BookingModal({
           {/* Doctor Brief Card */}
           <div className="bg-slate-50 border border-emerald-100 p-4 rounded-xl flex items-center gap-4">
             <img 
-              src={doctor.image.startsWith("/") ? encodeURI(doctor.image) : doctor.image} 
+              src={
+                doctor.name.toLowerCase().includes("ahmed") || doctor.name.toLowerCase().includes("rosemary")
+                  ? "/nurse-ahmed-rosemary.jpeg"
+                  : doctor.name.toLowerCase().includes("olaogun") || doctor.name.toLowerCase().includes("niniola")
+                  ? "/nurse-olaogun-niniola.jpeg"
+                  : doctor.name.toLowerCase().includes("ogochukwu") || doctor.name.toLowerCase().includes("treasure")
+                  ? "/nurse-ogochukwu-treasure.jpeg"
+                  : (doctor.image.startsWith("/") ? encodeURI(doctor.image) : doctor.image)
+              } 
               alt={doctor.name} 
               referrerPolicy="no-referrer"
               onError={(e) => {
-                const isFemale = doctor.name.toLowerCase().includes("ngozi") || 
-                                 doctor.name.toLowerCase().includes("nurse") || 
-                                 doctor.name.toLowerCase().includes("amina") || 
-                                 doctor.name.toLowerCase().includes("rosemary") || 
-                                 doctor.name.toLowerCase().includes("niniola") || 
-                                 doctor.name.toLowerCase().includes("treasure") || 
-                                 doctor.name.toLowerCase().includes("alao");
-                e.currentTarget.src = isFemale
-                  ? "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop"
-                  : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop";
+                const docLower = doctor.name.toLowerCase();
+                if (docLower.includes("ahmed") || docLower.includes("rosemary")) {
+                  e.currentTarget.src = "/nurse-ahmed-rosemary.jpeg";
+                } else if (docLower.includes("olaogun") || docLower.includes("niniola")) {
+                  e.currentTarget.src = "/nurse-olaogun-niniola.jpeg";
+                } else if (docLower.includes("ogochukwu") || docLower.includes("treasure")) {
+                  e.currentTarget.src = "/nurse-ogochukwu-treasure.jpeg";
+                }
               }}
               className="w-16 h-16 object-cover rounded-xl border border-emerald-200" 
+              style={{
+                objectPosition: 
+                  doctor.name.toLowerCase().includes("ahmed") || doctor.name.toLowerCase().includes("rosemary")
+                    ? "center 8%"
+                    : doctor.name.toLowerCase().includes("olaogun") || doctor.name.toLowerCase().includes("niniola")
+                    ? "center 12%"
+                    : doctor.name.toLowerCase().includes("ogochukwu") || doctor.name.toLowerCase().includes("treasure")
+                    ? "center 42%"
+                    : "center 20%"
+              }}
             />
             <div>
               <span className="bg-emerald-100 text-emerald-800 font-bold font-mono px-2 py-0.5 rounded text-[9px] uppercase">

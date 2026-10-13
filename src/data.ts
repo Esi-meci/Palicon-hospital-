@@ -1,8 +1,11 @@
 import { Doctor, Department } from "./types";
+import nurseAhmedImg from "./assets/images/nurse-ahmed-rosemary.jpeg";
+import nurseOlaogunImg from "./assets/images/nurse-olaogun-niniola.jpeg";
+import nurseTreasureImg from "./assets/images/nurse-ogochukwu-treasure.jpeg";
 
 export const DEPARTMENTS: Department[] = [
   {
-    name: "NURSING",
+    name: "Nursing",
     icon: "HeartHandshake",
     description: "Dedicated patient clinical nursing, continuous bedside care, post-surgical observation, wound dressing, vitals triage, and medication administration.",
     symptoms: ["Wound Dressing", "Medication Injections", "Post-Surgical Nursing", "Vitals Assessment", "Bedside Monitoring"]
@@ -66,36 +69,36 @@ export const DEPARTMENTS: Department[] = [
 export const INITIAL_DOCTORS: Doctor[] = [
   {
     id: "doc-1",
+    name: "Nurse Ogochukwu Treasure",
+    specialty: "Nursing",
+    rating: 5.0,
+    experience: "12 Years",
+    fees: 11000,
+    image: nurseTreasureImg || "/Nurse Ogochukwu Treasure.jpeg",
+    availability: "Mon, Thu, Fri (9:00 AM - 4:00 PM)",
+    email: "ogochukwu.treasure@paliconhospital.org"
+  },
+  {
+    id: "doc-2",
     name: "Nurse Ahmed Temitope Rosemary",
-    specialty: "NURSING",
+    specialty: "Nursing",
     rating: 4.9,
     experience: "14 Years",
     fees: 10000,
-    image: "/Nurse Ahmed Temitope Rosemary.jpeg",
+    image: nurseAhmedImg || "/Nurse Ahmed Temitope Rosemary.jpeg",
     availability: "Mon, Wed, Fri (8:00 AM - 2:00 PM)",
     email: "ahmed.rosemary@paliconhospital.org"
   },
   {
-    id: "doc-2",
+    id: "doc-3",
     name: "Nurse Olaogun Niniola",
-    specialty: "NURSING",
+    specialty: "Nursing",
     rating: 4.8,
     experience: "10 Years",
     fees: 9500,
-    image: "/Nurse Olaogun Niniola.jpeg",
+    image: nurseOlaogunImg || "/Nurse Olaogun Niniola.jpeg",
     availability: "Tue, Thu, Sat (8:00 AM - 3:00 PM)",
     email: "olaogun.niniola@paliconhospital.org"
-  },
-  {
-    id: "doc-3",
-    name: "Nurse Ogochukwu Treasure",
-    specialty: "NURSING",
-    rating: 5.0,
-    experience: "12 Years",
-    fees: 11000,
-    image: "/Nurse Ogochukwu Treasure.jpeg",
-    availability: "Mon, Thu, Fri (9:00 AM - 4:00 PM)",
-    email: "ogochukwu.treasure@paliconhospital.org"
   },
   {
     id: "doc-4",

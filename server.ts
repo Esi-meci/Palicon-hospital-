@@ -100,6 +100,20 @@ Here is a supportive, clear breakdown of your report for **${diagnosis}**:
 
 // Configure Vite or Static Files
 async function setupFrontend() {
+  // Directly serve public folder with high precedence
+  app.use(express.static(path.join(process.cwd(), "public")));
+
+  // Explicit route handlers for nurse profile images
+  app.get(["/Nurse*Rosemary*.jpeg", "/Nurse*Rosemary*.jpg", "/nurse-ahmed-rosemary.jpeg"], (req, res) => {
+    res.sendFile(path.join(process.cwd(), "public", "Nurse Ahmed Temitope Rosemary.jpeg"));
+  });
+  app.get(["/Nurse*Niniola*.jpeg", "/Nurse*Niniola*.jpg", "/nurse-olaogun-niniola.jpeg"], (req, res) => {
+    res.sendFile(path.join(process.cwd(), "public", "Nurse Olaogun Niniola.jpeg"));
+  });
+  app.get(["/Nurse*Treasure*.jpeg", "/Nurse*Treasure*.jpg", "/nurse-ogochukwu-treasure.jpeg"], (req, res) => {
+    res.sendFile(path.join(process.cwd(), "public", "Nurse Ogochukwu Treasure.jpeg"));
+  });
+
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },

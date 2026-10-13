@@ -404,6 +404,7 @@ export default function AdminPanel({
                       onChange={(e) => setSpecialty(e.target.value)}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-hidden font-semibold"
                     >
+                      <option value="Nursing">Nursing</option>
                       <option value="General Medicine">General Medicine</option>
                       <option value="Cardiology">Cardiology</option>
                       <option value="Pediatrics">Pediatrics</option>
@@ -500,20 +501,38 @@ export default function AdminPanel({
                 >
                   <div className="flex items-center gap-4">
                     <img 
-                      src={doc.image.startsWith("/") ? encodeURI(doc.image) : doc.image} 
+                      src={
+                        doc.name.toLowerCase().includes("ahmed") || doc.name.toLowerCase().includes("rosemary")
+                          ? "/nurse-ahmed-rosemary.jpeg"
+                          : doc.name.toLowerCase().includes("olaogun") || doc.name.toLowerCase().includes("niniola")
+                          ? "/nurse-olaogun-niniola.jpeg"
+                          : doc.name.toLowerCase().includes("ogochukwu") || doc.name.toLowerCase().includes("treasure")
+                          ? "/nurse-ogochukwu-treasure.jpeg"
+                          : (doc.image.startsWith("/") ? encodeURI(doc.image) : doc.image)
+                      } 
                       alt={doc.name} 
                       referrerPolicy="no-referrer"
                       onError={(e) => {
-                        const isFemale = doc.name.toLowerCase().includes("nurse") ||
-                                         doc.name.toLowerCase().includes("rosemary") ||
-                                         doc.name.toLowerCase().includes("niniola") ||
-                                         doc.name.toLowerCase().includes("treasure") ||
-                                         doc.name.toLowerCase().includes("ngozi");
-                        (e.target as HTMLImageElement).src = isFemale
-                          ? "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop"
-                          : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop";
+                        const docLower = doc.name.toLowerCase();
+                        if (docLower.includes("ahmed") || docLower.includes("rosemary")) {
+                          (e.target as HTMLImageElement).src = "/nurse-ahmed-rosemary.jpeg";
+                        } else if (docLower.includes("olaogun") || docLower.includes("niniola")) {
+                          (e.target as HTMLImageElement).src = "/nurse-olaogun-niniola.jpeg";
+                        } else if (docLower.includes("ogochukwu") || docLower.includes("treasure")) {
+                          (e.target as HTMLImageElement).src = "/nurse-ogochukwu-treasure.jpeg";
+                        }
                       }}
                       className="w-12 h-12 object-cover rounded-xl border border-emerald-100"
+                      style={{
+                        objectPosition: 
+                          doc.name.toLowerCase().includes("ahmed") || doc.name.toLowerCase().includes("rosemary")
+                            ? "center 8%"
+                            : doc.name.toLowerCase().includes("olaogun") || doc.name.toLowerCase().includes("niniola")
+                            ? "center 12%"
+                            : doc.name.toLowerCase().includes("ogochukwu") || doc.name.toLowerCase().includes("treasure")
+                            ? "center 42%"
+                            : "center 20%"
+                      }}
                     />
                     <div>
                       <div className="flex items-center gap-1.5">

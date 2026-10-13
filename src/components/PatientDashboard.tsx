@@ -638,26 +638,26 @@ export default function PatientDashboard({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {doctors.slice(0, 4).map((doc) => {
                     const lowercaseName = doc.name.toLowerCase();
+                    let resolvedImage = doc.image ? (doc.image.startsWith("/") ? encodeURI(doc.image) : doc.image) : "";
+                    if (lowercaseName.includes("ahmed") || lowercaseName.includes("rosemary")) {
+                      resolvedImage = "/nurse-ahmed-rosemary.jpeg";
+                    } else if (lowercaseName.includes("olaogun") || lowercaseName.includes("niniola")) {
+                      resolvedImage = "/nurse-olaogun-niniola.jpeg";
+                    } else if (lowercaseName.includes("ogochukwu") || lowercaseName.includes("treasure")) {
+                      resolvedImage = "/nurse-ogochukwu-treasure.jpeg";
+                    }
+
                     const isFemale = lowercaseName.includes("ngozi") || 
                                      lowercaseName.includes("funmilayo") || 
                                      lowercaseName.includes("amina") || 
                                      lowercaseName.includes("sarah") || 
                                      lowercaseName.includes("elena") || 
-                                     lowercaseName.includes("chloe") ||
-                                     lowercaseName.includes("yusuf") ||
-                                     lowercaseName.includes("achebe") ||
-                                     lowercaseName.includes("nurse") ||
-                                     lowercaseName.includes("rosemary") ||
-                                     lowercaseName.includes("niniola") ||
-                                     lowercaseName.includes("treasure") ||
-                                     lowercaseName.includes("temitope") ||
-                                     lowercaseName.includes("olaogun") ||
-                                     lowercaseName.includes("ogochukwu") ||
-                                     lowercaseName.includes("ahmed");
+                                     lowercaseName.includes("chloe") || 
+                                     lowercaseName.includes("yusuf") || 
+                                     lowercaseName.includes("achebe");
                     const placeholderPic = isFemale 
                       ? "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop"
                       : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop";
-                    const resolvedImage = doc.image ? (doc.image.startsWith("/") ? encodeURI(doc.image) : doc.image) : placeholderPic;
 
                     return (
                       <div key={doc.id} className="border border-emerald-50 rounded-xl p-4 bg-slate-50/50 flex items-center gap-3 justify-between hover:border-emerald-200 transition-colors text-left group">
@@ -670,6 +670,16 @@ export default function PatientDashboard({
                               (e.target as HTMLImageElement).src = placeholderPic;
                             }}
                             className="w-11 h-11 rounded-full object-cover shrink-0 border border-emerald-100" 
+                            style={{
+                              objectPosition: 
+                                doc.name.toLowerCase().includes("ahmed") || doc.name.toLowerCase().includes("rosemary")
+                                  ? "center 8%"
+                                  : doc.name.toLowerCase().includes("olaogun") || doc.name.toLowerCase().includes("niniola")
+                                  ? "center 12%"
+                                  : doc.name.toLowerCase().includes("ogochukwu") || doc.name.toLowerCase().includes("treasure")
+                                  ? "center 42%"
+                                  : "center 20%"
+                            }}
                           />
                           <div className="text-left">
                             <h4 className="font-bold text-xs text-emerald-950 font-sans">{doc.name}</h4>

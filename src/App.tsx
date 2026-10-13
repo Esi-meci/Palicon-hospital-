@@ -78,20 +78,27 @@ export default function App() {
       // Use standard real-time listener for doctors so admins can add or remove them cleanly
       const unsubscribe = onSnapshot(doctorsRef, (snapshot) => {
         if (snapshot.empty) {
-          // Fallback to static initial list if database is freshly deployed
+          // Fallback to static initial list
           setDoctors(INITIAL_DOCTORS);
         } else {
-          const list: Doctor[] = [];
-          snapshot.forEach((doc) => {
-            const docData = doc.data() as Doctor;
-            const seedMatch = INITIAL_DOCTORS.find((d) => d.id === docData.id);
-            if (seedMatch && (docData.id === "doc-1" || docData.id === "doc-2" || docData.id === "doc-3")) {
-              list.push(seedMatch);
-            } else {
-              list.push(docData);
+          const customDocs: Doctor[] = [];
+          snapshot.forEach((docSnap) => {
+            const docData = docSnap.data() as Doctor;
+            const docId = docData.id || docSnap.id;
+            // Filter out old seed doc-1, doc-2, doc-3 if they exist in firestore with old data
+            if (docId !== "doc-1" && docId !== "doc-2" && docId !== "doc-3") {
+              customDocs.push({ ...docData, id: docId });
             }
           });
-          setDoctors(list);
+          // Guarantee the three nurses are always the first 3 doctors in the list
+          const combined = [
+            INITIAL_DOCTORS[0], // Nurse Ogochukwu Treasure (NURSING)
+            INITIAL_DOCTORS[1], // Nurse Ahmed Temitope Rosemary (NURSING)
+            INITIAL_DOCTORS[2], // Nurse Olaogun Niniola (NURSING)
+            ...INITIAL_DOCTORS.slice(3).filter(initDoc => !customDocs.some(cd => cd.id === initDoc.id)),
+            ...customDocs
+          ];
+          setDoctors(combined);
         }
       }, (error) => {
         console.warn("Public doctors listing using offline fallback lists", error);

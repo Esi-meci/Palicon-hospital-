@@ -20,6 +20,7 @@ const iconMap: Record<string, React.ComponentType<any>> = {
 };
 
 const deptImages: Record<string, string> = {
+  "Nursing": "/Nurse Ahmed Temitope Rosemary.jpeg",
   "NURSING": "/Nurse Ahmed Temitope Rosemary.jpeg",
   "OBSTETRICS AND GYNAECOLOGY": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=600&auto=format&fit=crop", // female obstetrician talking to patient
   "GENERAL SURGERY": "https://images.unsplash.com/photo-1579684389782-64d84b5e901a?q=80&w=600&auto=format&fit=crop", // surgical team in OR
