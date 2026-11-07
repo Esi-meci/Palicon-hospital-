@@ -56,7 +56,7 @@ export default function App() {
   });
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [isProcessingGoogle, setIsProcessingGoogle] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Firestore Data Collections
   const [doctors, setDoctors] = useState<Doctor[]>(INITIAL_DOCTORS);
@@ -178,7 +178,15 @@ export default function App() {
       setLoading(false);
     });
 
-    return () => unsubscribeAuth();
+    // Safety timeout: ensure loading overlay never traps the user on a blank/white screen
+    const safetyTimer = setTimeout(() => {
+      setLoading(false);
+    }, 700);
+
+    return () => {
+      clearTimeout(safetyTimer);
+      unsubscribeAuth();
+    };
   }, []);
 
   // Real-time Database synchronization according to user role permissions

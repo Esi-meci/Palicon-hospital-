@@ -1,5 +1,5 @@
 {
-  "summary":  "Removed all placeholder doctors and their photos:\n- Erased Dr. Funmilayo Alao, Dr. Babajide Sowore, Dr. Amina Yusuf, Dr. Kingsley Peters, and Dr. Tochukwu Obi, along with all associated Unsplash photos and sample data.\n- Initial staff list now strictly contains the uploaded real staff:\n  - 7 Registered Nurses under 'Nursing'\n  - 1 Laboratory Scientist under 'Lab scientist' (Aina Segun Johnson)\n- Doctor category now cleanly awaits the user's doctor profiles with a tailored message.\n- Synchronized removal across Firestore listener, search, and directory views.",
-  "updatedAt":  "2026-11-07T14:51:37.863438832Z",
+  "summary":  "Summary of the carousel update in HomeHero using the user's uploaded images, titles, and fitting descriptions with fallback guards and index safety.",
+  "updatedAt":  "2026-11-07T18:17:25.169169746Z",
   "userFacing":  true
 }

@@ -15,33 +15,40 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
 
   const carouselImages = [
     {
-      url: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=800&auto=format&fit=crop",
-      title: "State-Of-The-Art Medical Facility",
-      desc: "Our ultra-modern reception lobby and diagnostics suites at Abule Folly, Lagos."
+      url: "/modern-healthcare-facility.jpg",
+      fallback: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1200&auto=format&fit=crop",
+      title: "Modern Healthcare Facility",
+      desc: "Our ultra-modern Palicon Hospital facility engineered for clinical excellence, patient comfort, and accessible 24/7 emergency medical care."
     },
     {
-      url: "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=800&auto=format&fit=crop",
-      title: "Precision Diagnostic Ultrasound",
-      desc: "Advanced therapeutic scanners and sterile consulting suites."
+      url: "/advanced-diagnostic-medical-testing-equipment.jpg",
+      fallback: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?q=80&w=1200&auto=format&fit=crop",
+      title: "Advanced Diagnostic & Medical Testing Equipment",
+      desc: "State-of-the-art clinical laboratory technology, precision diagnostic centrifuges, and microscopic blood analysis for accurate patient evaluations."
     },
     {
-      url: "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?q=80&w=800&auto=format&fit=crop",
-      title: "Private Specialist Consultations",
-      desc: "Warm clinical consultation rooms designed with absolute comfort and privacy."
-    },
-    {
-      url: "https://images.unsplash.com/photo-1586015555751-63bb77f4322a?q=80&w=800&auto=format&fit=crop",
-      title: "Fully Stocked Hospital Pharmacy",
-      desc: "Immaculate diagnostic dispensaries with secure medicine checks 24/7."
+      url: "/comprehensive-medical-supplies-pharmacy.jpg",
+      fallback: "https://images.unsplash.com/photo-1587745416684-47953f16f02f?q=80&w=1200&auto=format&fit=crop",
+      title: "Comprehensive Medical Supplies & Pharmacy",
+      desc: "Fully stocked hospital dispensary delivering authentic pharmaceuticals, certified prescription treatments, and 24/7 clinical healthcare supplies."
     }
   ];
 
+  const safeIndex = (currentSlide >= 0 && currentSlide < carouselImages.length)
+    ? currentSlide
+    : 0;
+  const currentItem = carouselImages[safeIndex] || carouselImages[0];
+
   useEffect(() => {
+    // If state was out of bounds, reset safely
+    if (currentSlide >= carouselImages.length) {
+      setCurrentSlide(0);
+    }
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [carouselImages.length]);
+  }, [carouselImages.length, currentSlide]);
 
   const handlePrev = () => {
     setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length);
@@ -123,13 +130,19 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                     <div
                       key={idx}
                       className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                        idx === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
+                        idx === safeIndex ? "opacity-100 z-10" : "opacity-0 z-0"
                       }`}
                     >
                       <img
                         src={slide.url}
                         alt={slide.title}
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          if (slide.fallback && target.src !== slide.fallback) {
+                            target.src = slide.fallback;
+                          }
+                        }}
                         className="w-full h-full object-cover opacity-100"
                       />
                     </div>
@@ -161,7 +174,7 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                         key={idx}
                         onClick={() => setCurrentSlide(idx)}
                         className={`w-2 h-2 rounded-full transition-all ${
-                          idx === currentSlide ? "bg-emerald-400 scale-125" : "bg-white/40"
+                          idx === safeIndex ? "bg-emerald-400 scale-125" : "bg-white/40"
                         }`}
                         aria-label={`Go to slide ${idx + 1}`}
                       />
@@ -173,7 +186,7 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                 <div className="p-6 text-white text-left space-y-4">
                   <div className="flex justify-between items-start">
                     <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest font-mono">
-                      {carouselImages[currentSlide].title}
+                      {currentItem.title}
                     </span>
                     <span className="bg-emerald-800/60 border border-emerald-600/30 text-emerald-300 px-2 py-0.5 rounded text-[10px] font-mono font-semibold">
                       ● Palicon Suite Live
@@ -181,7 +194,7 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                   </div>
 
                   <p className="text-emerald-100/90 text-sm leading-relaxed font-sans">
-                    {carouselImages[currentSlide].desc}
+                    {currentItem.desc}
                   </p>
 
                   <div className="bg-rose-950/40 rounded-xl p-4 border border-rose-500/30 space-y-3">
@@ -287,10 +300,16 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
           <div className="bg-white rounded-3xl overflow-hidden border border-emerald-100/80 shadow-xs hover:shadow-lg hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between group">
             <div className="relative h-44 bg-emerald-950 overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?q=80&w=400&auto=format&fit=crop"
+                src="/assets/aistudio/AaG3HcW0Pvmzf2e7P9ZbAw-AaG3HcW0mjfZwjeKbLhiEQ_3fa3bb93.jpg"
                 alt="Compassionate Care"
                 referrerPolicy="no-referrer"
-                className="absolute inset-0 w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  const target = e.currentTarget as HTMLImageElement;
+                  if (target.src.indexOf("compassionate-care.jpg") === -1) {
+                    target.src = "/compassionate-care.jpg";
+                  }
+                }}
+                className="absolute inset-0 w-full h-full object-cover object-top opacity-95 group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent pointer-events-none" />
               
