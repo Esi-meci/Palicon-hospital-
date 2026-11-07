@@ -113,6 +113,21 @@ async function setupFrontend() {
   app.get(["/Nurse*Treasure*.jpeg", "/Nurse*Treasure*.jpg", "/nurse-ogochukwu-treasure.jpeg"], (req, res) => {
     res.sendFile(path.join(process.cwd(), "public", "Nurse Ogochukwu Treasure.jpeg"));
   });
+  app.get(["/Nrs*Florence*.jpeg", "/Nrs*Florence*.jpg", "/nrs-kanayo-florence.jpeg"], (req, res) => {
+    res.sendFile(path.join(process.cwd(), "public", "nrs-kanayo-florence.jpeg"));
+  });
+  app.get(["/Nrs*Aborowa*.jpeg", "/Nrs*Aborowa*.jpg", "/nrs-aborowa-ayomide-o.jpeg"], (req, res) => {
+    res.sendFile(path.join(process.cwd(), "public", "nrs-aborowa-ayomide-o.jpeg"));
+  });
+  app.get(["/Nrs*Chijioke*.jpeg", "/Nrs*Chijioke*.jpg", "/nrs-chijioke-chioma-priscilla.jpeg"], (req, res) => {
+    res.sendFile(path.join(process.cwd(), "public", "nrs-chijioke-chioma-priscilla.jpeg"));
+  });
+  app.get(["/Oshin*Busola*.jpeg", "/Oshin*Busola*.jpg", "/oshin-busola-o.jpeg"], (req, res) => {
+    res.sendFile(path.join(process.cwd(), "public", "oshin-busola-o.jpeg"));
+  });
+  app.get(["/Aina*Segun*.jpeg", "/Aina*Segun*.jpg", "/aina-segun-johnson.jpeg"], (req, res) => {
+    res.sendFile(path.join(process.cwd(), "public", "aina-segun-johnson.jpeg"));
+  });
 
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

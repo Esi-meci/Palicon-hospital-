@@ -405,12 +405,8 @@ export default function AdminPanel({
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-hidden font-semibold"
                     >
                       <option value="Nursing">Nursing</option>
-                      <option value="General Medicine">General Medicine</option>
-                      <option value="Cardiology">Cardiology</option>
-                      <option value="Pediatrics">Pediatrics</option>
-                      <option value="Neurology">Neurology</option>
-                      <option value="Orthopedics">Orthopedics</option>
-                      <option value="Dermatology">Dermatology</option>
+                      <option value="Doctor">Doctor</option>
+                      <option value="Lab scientist">Lab scientist</option>
                     </select>
                   </div>
                 </div>
@@ -502,7 +498,17 @@ export default function AdminPanel({
                   <div className="flex items-center gap-4">
                     <img 
                       src={
-                        doc.name.toLowerCase().includes("ahmed") || doc.name.toLowerCase().includes("rosemary")
+                        doc.name.toLowerCase().includes("kanayo") || doc.name.toLowerCase().includes("florence")
+                          ? "/nrs-kanayo-florence.jpeg"
+                          : doc.name.toLowerCase().includes("aborowa") || doc.name.toLowerCase().includes("ayomide")
+                          ? "/nrs-aborowa-ayomide-o.jpeg"
+                          : doc.name.toLowerCase().includes("chijioke") || doc.name.toLowerCase().includes("chioma") || doc.name.toLowerCase().includes("priscilla")
+                          ? "/nrs-chijioke-chioma-priscilla.jpeg"
+                          : doc.name.toLowerCase().includes("oshin") || doc.name.toLowerCase().includes("busola")
+                          ? "/oshin-busola-o.jpeg"
+                          : doc.name.toLowerCase().includes("aina") || doc.name.toLowerCase().includes("segun") || doc.name.toLowerCase().includes("johnson")
+                          ? "/aina-segun-johnson.jpeg"
+                          : doc.name.toLowerCase().includes("ahmed") || doc.name.toLowerCase().includes("rosemary")
                           ? "/nurse-ahmed-rosemary.jpeg"
                           : doc.name.toLowerCase().includes("olaogun") || doc.name.toLowerCase().includes("niniola")
                           ? "/nurse-olaogun-niniola.jpeg"
@@ -514,7 +520,17 @@ export default function AdminPanel({
                       referrerPolicy="no-referrer"
                       onError={(e) => {
                         const docLower = doc.name.toLowerCase();
-                        if (docLower.includes("ahmed") || docLower.includes("rosemary")) {
+                        if (docLower.includes("kanayo") || docLower.includes("florence")) {
+                          (e.target as HTMLImageElement).src = "/nrs-kanayo-florence.jpeg";
+                        } else if (docLower.includes("aborowa") || docLower.includes("ayomide")) {
+                          (e.target as HTMLImageElement).src = "/nrs-aborowa-ayomide-o.jpeg";
+                        } else if (docLower.includes("chijioke") || docLower.includes("chioma") || docLower.includes("priscilla")) {
+                          (e.target as HTMLImageElement).src = "/nrs-chijioke-chioma-priscilla.jpeg";
+                        } else if (docLower.includes("oshin") || docLower.includes("busola")) {
+                          (e.target as HTMLImageElement).src = "/oshin-busola-o.jpeg";
+                        } else if (docLower.includes("aina") || docLower.includes("segun") || docLower.includes("johnson")) {
+                          (e.target as HTMLImageElement).src = "/aina-segun-johnson.jpeg";
+                        } else if (docLower.includes("ahmed") || docLower.includes("rosemary")) {
                           (e.target as HTMLImageElement).src = "/nurse-ahmed-rosemary.jpeg";
                         } else if (docLower.includes("olaogun") || docLower.includes("niniola")) {
                           (e.target as HTMLImageElement).src = "/nurse-olaogun-niniola.jpeg";
@@ -525,12 +541,22 @@ export default function AdminPanel({
                       className="w-12 h-12 object-cover rounded-xl border border-emerald-100"
                       style={{
                         objectPosition: 
-                          doc.name.toLowerCase().includes("ahmed") || doc.name.toLowerCase().includes("rosemary")
-                            ? "center 8%"
+                          doc.name.toLowerCase().includes("kanayo") || doc.name.toLowerCase().includes("florence")
+                            ? "center 20%"
+                            : doc.name.toLowerCase().includes("aborowa") || doc.name.toLowerCase().includes("ayomide")
+                            ? "center 20%"
+                            : doc.name.toLowerCase().includes("chijioke") || doc.name.toLowerCase().includes("chioma") || doc.name.toLowerCase().includes("priscilla")
+                            ? "center 20%"
+                            : doc.name.toLowerCase().includes("oshin") || doc.name.toLowerCase().includes("busola")
+                            ? "center 20%"
+                            : doc.name.toLowerCase().includes("aina") || doc.name.toLowerCase().includes("segun") || doc.name.toLowerCase().includes("johnson")
+                            ? "center 20%"
+                            : doc.name.toLowerCase().includes("ahmed") || doc.name.toLowerCase().includes("rosemary")
+                            ? "center 15%"
                             : doc.name.toLowerCase().includes("olaogun") || doc.name.toLowerCase().includes("niniola")
-                            ? "center 12%"
+                            ? "center 16%"
                             : doc.name.toLowerCase().includes("ogochukwu") || doc.name.toLowerCase().includes("treasure")
-                            ? "center 42%"
+                            ? "center 20%"
                             : "center 20%"
                       }}
                     />

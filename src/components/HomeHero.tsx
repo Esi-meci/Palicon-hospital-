@@ -92,7 +92,7 @@ export default function HomeHero({ onBookNow, onExploreDoctors, onViewDepartment
                   id="hero-doctors-btn"
                   className="inline-flex justify-center items-center gap-2 px-6 h-12 rounded-xl bg-white border border-emerald-200 text-emerald-800 font-semibold hover:bg-emerald-50/50 transition-all cursor-pointer animate-none"
                 >
-                  Meet Our Doctors
+                  Meet Our Staff
                 </button>
               </div>
 

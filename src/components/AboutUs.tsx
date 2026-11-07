@@ -48,7 +48,7 @@ export default function AboutUs() {
     },
     {
       question: "How do I book an appointment with a specialist?",
-      answer: "You can easily schedule a consultation by logging in to our secure patient portal. Once authenticated, navigate to \"Our Doctors\", choose your preferred practitioner and available time slot, and submit. Your reservation goes live instantly!"
+      answer: "You can easily schedule a consultation by logging in to our secure patient portal. Once authenticated, navigate to \"Our Staff\", choose your preferred practitioner and available time slot, and submit. Your reservation goes live instantly!"
     },
     {
       question: "Is my medical data confidential?",

@@ -2,6 +2,11 @@ import { Doctor, Department } from "./types";
 import nurseAhmedImg from "./assets/images/nurse-ahmed-rosemary.jpeg";
 import nurseOlaogunImg from "./assets/images/nurse-olaogun-niniola.jpeg";
 import nurseTreasureImg from "./assets/images/nurse-ogochukwu-treasure.jpeg";
+import nrsKanayoImg from "./assets/images/nrs-kanayo-florence.jpeg";
+import nrsAborowaImg from "./assets/images/nrs-aborowa-ayomide-o.jpeg";
+import nrsChijiokeImg from "./assets/images/nrs-chijioke-chioma-priscilla.jpeg";
+import oshinBusolaImg from "./assets/images/oshin-busola-o.jpeg";
+import ainaSegunImg from "./assets/images/aina-segun-johnson.jpeg";
 
 export const DEPARTMENTS: Department[] = [
   {
@@ -101,70 +106,59 @@ export const INITIAL_DOCTORS: Doctor[] = [
     email: "olaogun.niniola@paliconhospital.org"
   },
   {
-    id: "doc-4",
-    name: "Dr. Funmilayo Alao",
-    specialty: "ORTHOPEDICS",
-    rating: 4.7,
-    experience: "12 Years",
-    fees: 13000,
-    image: "https://images.unsplash.com/photo-1622960206462-7d97b8377f52?q=80&w=256&auto=format&fit=crop",
-    availability: "Wed, Fri (10:00 AM - 3:00 PM)",
-    email: "funmilayo.alao@paliconhospital.org"
-  },
-  {
-    id: "doc-5",
-    name: "Dr. Babajide Sowore",
-    specialty: "GENERAL MEDICINE",
+    id: "doc-nrs-kanayo",
+    name: "Nrs Kanayo Florence",
+    specialty: "Nursing",
     rating: 4.9,
-    experience: "15 Years",
-    fees: 9500,
-    image: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?q=80&w=256&auto=format&fit=crop",
-    availability: "Mon, Tue, Wed, Thu, Fri (8:30 AM - 12:00 PM)",
-    email: "babajide.sowore@paliconhospital.org"
-  },
-  {
-    id: "doc-6",
-    name: "Dr. Amina Yusuf",
-    specialty: "OBSTETRICS AND GYNAECOLOGY",
-    rating: 4.8,
-    experience: "8 Years",
-    fees: 12000,
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop",
-    availability: "Tue, Wed (2:00 PM - 6:00 PM)",
-    email: "amina.yusuf@paliconhospital.org"
-  },
-  {
-    id: "doc-7",
-    name: "Dr. Kingsley Peters",
-    specialty: "GERIATRICS",
-    rating: 4.9,
-    experience: "16 Years",
-    fees: 16000,
-    image: "https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?q=80&w=256&auto=format&fit=crop",
-    availability: "Mon, Wed (11:00 AM - 4:00 PM)",
-    email: "kingsley.peters@paliconhospital.org"
-  },
-  {
-    id: "doc-8",
-    name: "Dr. Helen Bassey",
-    specialty: "MEDICAL LABORATORY SERVICES",
-    rating: 4.8,
     experience: "11 Years",
-    fees: 8000,
-    image: "https://images.unsplash.com/photo-1594824813573-246434de83fb?q=80&w=256&auto=format&fit=crop",
-    availability: "Tue, Thu, Fri (8:00 AM - 3:00 PM)",
-    email: "helen.bassey@paliconhospital.org"
+    fees: 10500,
+    image: nrsKanayoImg || "/Nrs Kanayo Florence.jpeg",
+    availability: "Mon, Tue, Thu (8:00 AM - 3:00 PM)",
+    email: "kanayo.florence@paliconhospital.org"
   },
   {
-    id: "doc-9",
-    name: "Dr. Tochukwu Obi",
-    specialty: "RADIOLOGY",
+    id: "doc-nrs-aborowa",
+    name: "Nrs Aborowa Ayomide O",
+    specialty: "Nursing",
     rating: 4.9,
+    experience: "9 Years",
+    fees: 9500,
+    image: nrsAborowaImg || "/Nrs Aborowa Ayomide O.jpeg",
+    availability: "Tue, Wed, Fri (9:00 AM - 4:00 PM)",
+    email: "aborowa.ayomide@paliconhospital.org"
+  },
+  {
+    id: "doc-nrs-chijioke",
+    name: "Nrs Chijioke Chioma Priscilla",
+    specialty: "Nursing",
+    rating: 5.0,
     experience: "13 Years",
-    fees: 14000,
-    image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=256&auto=format&fit=crop",
-    availability: "Mon, Wed, Thu (9:00 AM - 2:00 PM)",
-    email: "tochukwu.obi@paliconhospital.org"
+    fees: 11500,
+    image: nrsChijiokeImg || "/Nrs Chijioke Chioma Priscilla.jpeg",
+    availability: "Wed, Thu, Sat (8:00 AM - 2:30 PM)",
+    email: "chijioke.chioma@paliconhospital.org"
+  },
+  {
+    id: "doc-nrs-oshin",
+    name: "Nurse Oshin Busola O",
+    specialty: "Nursing",
+    rating: 4.9,
+    experience: "10 Years",
+    fees: 10000,
+    image: oshinBusolaImg || "/Nurse Oshin Busola O.jpeg",
+    availability: "Mon, Wed, Fri (8:00 AM - 3:00 PM)",
+    email: "oshin.busola@paliconhospital.org"
+  },
+  {
+    id: "staff-aina-segun",
+    name: "Aina Segun Johnson",
+    specialty: "Lab scientist",
+    rating: 5.0,
+    experience: "9 Years",
+    fees: 8500,
+    image: ainaSegunImg || "/Aina Segun Johnson.jpeg",
+    availability: "Mon, Tue, Wed, Thu, Fri (8:00 AM - 4:00 PM)",
+    email: "aina.segun@paliconhospital.org"
   }
 ];
 

@@ -27,7 +27,7 @@ export default function Navbar({
   const navItems = [
     { id: "home", label: "Home" },
     { id: "departments", label: "Departments" },
-    { id: "doctors", label: "Our Doctors" },
+    { id: "doctors", label: "Our Staff" },
     { id: "about", label: "About Us" },
     { id: "contact", label: "Contact Us" }
   ];

@@ -639,7 +639,17 @@ export default function PatientDashboard({
                   {doctors.slice(0, 4).map((doc) => {
                     const lowercaseName = doc.name.toLowerCase();
                     let resolvedImage = doc.image ? (doc.image.startsWith("/") ? encodeURI(doc.image) : doc.image) : "";
-                    if (lowercaseName.includes("ahmed") || lowercaseName.includes("rosemary")) {
+                    if (lowercaseName.includes("kanayo") || lowercaseName.includes("florence")) {
+                      resolvedImage = "/nrs-kanayo-florence.jpeg";
+                    } else if (lowercaseName.includes("aborowa") || lowercaseName.includes("ayomide")) {
+                      resolvedImage = "/nrs-aborowa-ayomide-o.jpeg";
+                    } else if (lowercaseName.includes("chijioke") || lowercaseName.includes("chioma") || lowercaseName.includes("priscilla")) {
+                      resolvedImage = "/nrs-chijioke-chioma-priscilla.jpeg";
+                    } else if (lowercaseName.includes("oshin") || lowercaseName.includes("busola")) {
+                      resolvedImage = "/oshin-busola-o.jpeg";
+                    } else if (lowercaseName.includes("aina") || lowercaseName.includes("segun") || lowercaseName.includes("johnson")) {
+                      resolvedImage = "/aina-segun-johnson.jpeg";
+                    } else if (lowercaseName.includes("ahmed") || lowercaseName.includes("rosemary")) {
                       resolvedImage = "/nurse-ahmed-rosemary.jpeg";
                     } else if (lowercaseName.includes("olaogun") || lowercaseName.includes("niniola")) {
                       resolvedImage = "/nurse-olaogun-niniola.jpeg";
@@ -654,7 +664,13 @@ export default function PatientDashboard({
                                      lowercaseName.includes("elena") || 
                                      lowercaseName.includes("chloe") || 
                                      lowercaseName.includes("yusuf") || 
-                                     lowercaseName.includes("achebe");
+                                     lowercaseName.includes("achebe") ||
+                                     lowercaseName.includes("kanayo") ||
+                                     lowercaseName.includes("florence") ||
+                                     lowercaseName.includes("chioma") ||
+                                     lowercaseName.includes("priscilla") ||
+                                     lowercaseName.includes("oshin") ||
+                                     lowercaseName.includes("busola");
                     const placeholderPic = isFemale 
                       ? "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop"
                       : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop";
@@ -672,12 +688,22 @@ export default function PatientDashboard({
                             className="w-11 h-11 rounded-full object-cover shrink-0 border border-emerald-100" 
                             style={{
                               objectPosition: 
-                                doc.name.toLowerCase().includes("ahmed") || doc.name.toLowerCase().includes("rosemary")
-                                  ? "center 8%"
+                                doc.name.toLowerCase().includes("kanayo") || doc.name.toLowerCase().includes("florence")
+                                  ? "center 20%"
+                                  : doc.name.toLowerCase().includes("aborowa") || doc.name.toLowerCase().includes("ayomide")
+                                  ? "center 20%"
+                                  : doc.name.toLowerCase().includes("chijioke") || doc.name.toLowerCase().includes("chioma") || doc.name.toLowerCase().includes("priscilla")
+                                  ? "center 20%"
+                                  : doc.name.toLowerCase().includes("oshin") || doc.name.toLowerCase().includes("busola")
+                                  ? "center 20%"
+                                  : doc.name.toLowerCase().includes("aina") || doc.name.toLowerCase().includes("segun") || doc.name.toLowerCase().includes("johnson")
+                                  ? "center 20%"
+                                  : doc.name.toLowerCase().includes("ahmed") || doc.name.toLowerCase().includes("rosemary")
+                                  ? "center 15%"
                                   : doc.name.toLowerCase().includes("olaogun") || doc.name.toLowerCase().includes("niniola")
-                                  ? "center 12%"
+                                  ? "center 16%"
                                   : doc.name.toLowerCase().includes("ogochukwu") || doc.name.toLowerCase().includes("treasure")
-                                  ? "center 42%"
+                                  ? "center 20%"
                                   : "center 20%"
                             }}
                           />

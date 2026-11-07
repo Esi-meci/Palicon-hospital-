@@ -13,17 +13,37 @@ interface DoctorsSectionProps {
 import nurseAhmedImg from "../assets/images/nurse-ahmed-rosemary.jpeg";
 import nurseOlaogunImg from "../assets/images/nurse-olaogun-niniola.jpeg";
 import nurseTreasureImg from "../assets/images/nurse-ogochukwu-treasure.jpeg";
+import nrsKanayoImg from "../assets/images/nrs-kanayo-florence.jpeg";
+import nrsAborowaImg from "../assets/images/nrs-aborowa-ayomide-o.jpeg";
+import nrsChijiokeImg from "../assets/images/nrs-chijioke-chioma-priscilla.jpeg";
+import oshinBusolaImg from "../assets/images/oshin-busola-o.jpeg";
+import ainaSegunImg from "../assets/images/aina-segun-johnson.jpeg";
 
 function getDoctorObjectPosition(name: string): string {
   const lowercaseName = name.toLowerCase();
   if (lowercaseName.includes("ahmed") || lowercaseName.includes("rosemary") || lowercaseName.includes("temitope")) {
-    return "center 8%"; // Focus directly on Nurse Ahmed's face and upper scrubs
+    return "center 15%"; // Focus directly on Nurse Ahmed's face and upper scrubs
   }
   if (lowercaseName.includes("olaogun") || lowercaseName.includes("niniola")) {
-    return "center 12%"; // Focus directly on Nurse Olaogun's hijab and face
+    return "center 16%"; // Focus directly on Nurse Olaogun's hijab and face
   }
   if (lowercaseName.includes("ogochukwu") || lowercaseName.includes("treasure")) {
-    return "center 42%"; // Focus on Nurse Ogochukwu's smiling face
+    return "center 20%"; // Focus on Nurse Ogochukwu's smiling face
+  }
+  if (lowercaseName.includes("kanayo") || lowercaseName.includes("florence")) {
+    return "center 20%"; // Focus cleanly on Nrs Kanayo Florence's face and smile
+  }
+  if (lowercaseName.includes("aborowa") || lowercaseName.includes("ayomide")) {
+    return "center 20%"; // Focus on Nrs Aborowa Ayomide's face
+  }
+  if (lowercaseName.includes("chijioke") || lowercaseName.includes("chioma") || lowercaseName.includes("priscilla")) {
+    return "center 20%"; // Focus on Nrs Chijioke Chioma Priscilla's face
+  }
+  if (lowercaseName.includes("oshin") || lowercaseName.includes("busola")) {
+    return "center 20%"; // Focus on Nurse Oshin Busola's face and smile
+  }
+  if (lowercaseName.includes("aina") || lowercaseName.includes("segun") || lowercaseName.includes("johnson")) {
+    return "center 20%"; // Focus on Aina Segun Johnson's face and lab coat
   }
   return "center 20%";
 }
@@ -32,7 +52,7 @@ function SafeDoctorImage({ src, name, className }: { src: string; name: string; 
   const [hasError, setHasError] = useState(false);
   const lowercaseName = name.toLowerCase();
 
-  // Directly assign the exact profile picture for each nurse
+  // Directly assign the exact profile picture for each staff member
   let directSrc = src;
   if (lowercaseName.includes("ahmed") || lowercaseName.includes("rosemary") || lowercaseName.includes("temitope")) {
     directSrc = nurseAhmedImg;
@@ -40,6 +60,16 @@ function SafeDoctorImage({ src, name, className }: { src: string; name: string; 
     directSrc = nurseOlaogunImg;
   } else if (lowercaseName.includes("ogochukwu") || lowercaseName.includes("treasure")) {
     directSrc = nurseTreasureImg;
+  } else if (lowercaseName.includes("kanayo") || lowercaseName.includes("florence")) {
+    directSrc = nrsKanayoImg;
+  } else if (lowercaseName.includes("aborowa") || lowercaseName.includes("ayomide")) {
+    directSrc = nrsAborowaImg;
+  } else if (lowercaseName.includes("chijioke") || lowercaseName.includes("chioma") || lowercaseName.includes("priscilla")) {
+    directSrc = nrsChijiokeImg;
+  } else if (lowercaseName.includes("oshin") || lowercaseName.includes("busola")) {
+    directSrc = oshinBusolaImg;
+  } else if (lowercaseName.includes("aina") || lowercaseName.includes("segun") || lowercaseName.includes("johnson")) {
+    directSrc = ainaSegunImg;
   } else if (src.startsWith("/")) {
     directSrc = encodeURI(src);
   }
@@ -51,7 +81,13 @@ function SafeDoctorImage({ src, name, className }: { src: string; name: string; 
                    lowercaseName.includes("elena") || 
                    lowercaseName.includes("chloe") || 
                    lowercaseName.includes("yusuf") || 
-                   lowercaseName.includes("achebe");
+                   lowercaseName.includes("achebe") ||
+                   lowercaseName.includes("kanayo") ||
+                   lowercaseName.includes("florence") ||
+                   lowercaseName.includes("chioma") ||
+                   lowercaseName.includes("priscilla") ||
+                   lowercaseName.includes("oshin") ||
+                   lowercaseName.includes("busola");
                    
   const fallbackUrl = isFemale 
     ? "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop"
@@ -64,7 +100,16 @@ function SafeDoctorImage({ src, name, className }: { src: string; name: string; 
       referrerPolicy="no-referrer"
       style={{ objectPosition: getDoctorObjectPosition(name) }}
       onError={() => {
-        if (!lowercaseName.includes("ahmed") && !lowercaseName.includes("olaogun") && !lowercaseName.includes("ogochukwu") && !lowercaseName.includes("rosemary") && !lowercaseName.includes("niniola") && !lowercaseName.includes("treasure")) {
+        const isKnownStaff = lowercaseName.includes("ahmed") || lowercaseName.includes("olaogun") || 
+          lowercaseName.includes("ogochukwu") || lowercaseName.includes("rosemary") || 
+          lowercaseName.includes("niniola") || lowercaseName.includes("treasure") ||
+          lowercaseName.includes("kanayo") || lowercaseName.includes("florence") ||
+          lowercaseName.includes("aborowa") || lowercaseName.includes("ayomide") ||
+          lowercaseName.includes("chijioke") || lowercaseName.includes("chioma") ||
+          lowercaseName.includes("priscilla") || lowercaseName.includes("oshin") ||
+          lowercaseName.includes("busola") || lowercaseName.includes("aina") ||
+          lowercaseName.includes("segun") || lowercaseName.includes("johnson");
+        if (!isKnownStaff) {
           setHasError(true);
         }
       }}
@@ -81,37 +126,38 @@ export default function DoctorsSection({
 }: DoctorsSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Distinct list of specializations with Nursing guaranteed first after All
-  const allSpecialtiesRaw = Array.from(
-    new Set([
-      "Nursing",
-      ...DEPARTMENTS.map((d) => d.name),
-      ...doctors.map((d) => d.specialty)
-    ])
-  );
-
-  const seenSpecialties = new Set<string>();
-  const normalizedSpecialties: string[] = [];
-  
-  // Guarantee "Nursing" comes first right after "All"
-  normalizedSpecialties.push("Nursing");
-  seenSpecialties.add("nursing");
-  seenSpecialties.add("all");
-
-  for (const item of allSpecialtiesRaw) {
-    const lower = item.trim().toLowerCase();
-    if (!seenSpecialties.has(lower)) {
-      seenSpecialties.add(lower);
-      normalizedSpecialties.push(item);
-    }
-  }
-
-  const specialties = ["All", ...normalizedSpecialties];
+  // Only the 3 requested categories plus All
+  const specialties = ["All", "Nursing", "Doctor", "Lab scientist"];
 
   const filteredDoctors = doctors.filter((doc) => {
-    const matchesSpecialty = 
-      selectedSpecialtyFilter === "All" || 
-      doc.specialty.trim().toLowerCase() === selectedSpecialtyFilter.trim().toLowerCase();
+    let matchesSpecialty = false;
+    const filterLower = selectedSpecialtyFilter.trim().toLowerCase();
+    const docSpecLower = doc.specialty.trim().toLowerCase();
+
+    if (filterLower === "all") {
+      matchesSpecialty = true;
+    } else if (filterLower === "nursing") {
+      matchesSpecialty = docSpecLower === "nursing";
+    } else if (filterLower === "doctor") {
+      matchesSpecialty = 
+        docSpecLower === "doctor" || 
+        doc.name.toLowerCase().startsWith("dr.") || 
+        docSpecLower.includes("medicine") || 
+        docSpecLower.includes("surgery") || 
+        docSpecLower.includes("obstetrics") || 
+        docSpecLower.includes("pediatrics") || 
+        docSpecLower.includes("orthopedics") || 
+        docSpecLower.includes("geriatrics") || 
+        docSpecLower.includes("radiology");
+    } else if (filterLower === "lab scientist") {
+      matchesSpecialty = 
+        docSpecLower === "lab scientist" || 
+        docSpecLower.includes("lab") || 
+        doc.name.toLowerCase().includes("aina");
+    } else {
+      matchesSpecialty = docSpecLower === filterLower;
+    }
+
     const matchesSearch = 
       doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       doc.specialty.toLowerCase().includes(searchQuery.toLowerCase());
@@ -267,13 +313,22 @@ export default function DoctorsSection({
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl py-12 px-4 text-center border border-emerald-100">
-            <p className="text-sm font-semibold text-emerald-950">No medical professionals match your current query.</p>
+          <div className="bg-white rounded-2xl py-12 px-4 text-center border border-emerald-100 space-y-2">
+            <p className="text-sm font-semibold text-emerald-950">
+              {selectedSpecialtyFilter === "Doctor"
+                ? "Doctor profiles are currently being updated and will be available soon."
+                : "No staff members match your current query."}
+            </p>
+            <p className="text-xs text-emerald-900/50">
+              {selectedSpecialtyFilter === "Doctor"
+                ? "Please consult with our Nursing team or Lab Scientist, or check back shortly."
+                : "Try selecting another category or resetting filters."}
+            </p>
             <button 
               onClick={() => { setSearchQuery(""); setSelectedSpecialtyFilter("All"); }}
-              className="mt-3 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-extrabold px-3 py-1.5 rounded-lg"
+              className="mt-2 inline-block text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-extrabold px-3 py-1.5 rounded-lg cursor-pointer"
             >
-              Clear Filters
+              Reset to All
             </button>
           </div>
         )}

@@ -81,7 +81,17 @@ export default function BookingModal({
           <div className="bg-slate-50 border border-emerald-100 p-4 rounded-xl flex items-center gap-4">
             <img 
               src={
-                doctor.name.toLowerCase().includes("ahmed") || doctor.name.toLowerCase().includes("rosemary")
+                doctor.name.toLowerCase().includes("kanayo") || doctor.name.toLowerCase().includes("florence")
+                  ? "/nrs-kanayo-florence.jpeg"
+                  : doctor.name.toLowerCase().includes("aborowa") || doctor.name.toLowerCase().includes("ayomide")
+                  ? "/nrs-aborowa-ayomide-o.jpeg"
+                  : doctor.name.toLowerCase().includes("chijioke") || doctor.name.toLowerCase().includes("chioma") || doctor.name.toLowerCase().includes("priscilla")
+                  ? "/nrs-chijioke-chioma-priscilla.jpeg"
+                  : doctor.name.toLowerCase().includes("oshin") || doctor.name.toLowerCase().includes("busola")
+                  ? "/oshin-busola-o.jpeg"
+                  : doctor.name.toLowerCase().includes("aina") || doctor.name.toLowerCase().includes("segun") || doctor.name.toLowerCase().includes("johnson")
+                  ? "/aina-segun-johnson.jpeg"
+                  : doctor.name.toLowerCase().includes("ahmed") || doctor.name.toLowerCase().includes("rosemary")
                   ? "/nurse-ahmed-rosemary.jpeg"
                   : doctor.name.toLowerCase().includes("olaogun") || doctor.name.toLowerCase().includes("niniola")
                   ? "/nurse-olaogun-niniola.jpeg"
@@ -93,7 +103,17 @@ export default function BookingModal({
               referrerPolicy="no-referrer"
               onError={(e) => {
                 const docLower = doctor.name.toLowerCase();
-                if (docLower.includes("ahmed") || docLower.includes("rosemary")) {
+                if (docLower.includes("kanayo") || docLower.includes("florence")) {
+                  e.currentTarget.src = "/nrs-kanayo-florence.jpeg";
+                } else if (docLower.includes("aborowa") || docLower.includes("ayomide")) {
+                  e.currentTarget.src = "/nrs-aborowa-ayomide-o.jpeg";
+                } else if (docLower.includes("chijioke") || docLower.includes("chioma") || docLower.includes("priscilla")) {
+                  e.currentTarget.src = "/nrs-chijioke-chioma-priscilla.jpeg";
+                } else if (docLower.includes("oshin") || docLower.includes("busola")) {
+                  e.currentTarget.src = "/oshin-busola-o.jpeg";
+                } else if (docLower.includes("aina") || docLower.includes("segun") || docLower.includes("johnson")) {
+                  e.currentTarget.src = "/aina-segun-johnson.jpeg";
+                } else if (docLower.includes("ahmed") || docLower.includes("rosemary")) {
                   e.currentTarget.src = "/nurse-ahmed-rosemary.jpeg";
                 } else if (docLower.includes("olaogun") || docLower.includes("niniola")) {
                   e.currentTarget.src = "/nurse-olaogun-niniola.jpeg";
@@ -104,12 +124,22 @@ export default function BookingModal({
               className="w-16 h-16 object-cover rounded-xl border border-emerald-200" 
               style={{
                 objectPosition: 
-                  doctor.name.toLowerCase().includes("ahmed") || doctor.name.toLowerCase().includes("rosemary")
-                    ? "center 8%"
+                  doctor.name.toLowerCase().includes("kanayo") || doctor.name.toLowerCase().includes("florence")
+                    ? "center 20%"
+                    : doctor.name.toLowerCase().includes("aborowa") || doctor.name.toLowerCase().includes("ayomide")
+                    ? "center 20%"
+                    : doctor.name.toLowerCase().includes("chijioke") || doctor.name.toLowerCase().includes("chioma") || doctor.name.toLowerCase().includes("priscilla")
+                    ? "center 20%"
+                    : doctor.name.toLowerCase().includes("oshin") || doctor.name.toLowerCase().includes("busola")
+                    ? "center 20%"
+                    : doctor.name.toLowerCase().includes("aina") || doctor.name.toLowerCase().includes("segun") || doctor.name.toLowerCase().includes("johnson")
+                    ? "center 20%"
+                    : doctor.name.toLowerCase().includes("ahmed") || doctor.name.toLowerCase().includes("rosemary")
+                    ? "center 15%"
                     : doctor.name.toLowerCase().includes("olaogun") || doctor.name.toLowerCase().includes("niniola")
-                    ? "center 12%"
+                    ? "center 16%"
                     : doctor.name.toLowerCase().includes("ogochukwu") || doctor.name.toLowerCase().includes("treasure")
-                    ? "center 42%"
+                    ? "center 20%"
                     : "center 20%"
               }}
             />

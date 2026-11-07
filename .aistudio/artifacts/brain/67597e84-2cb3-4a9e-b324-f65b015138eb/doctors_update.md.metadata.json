@@ -1,5 +1,5 @@
 {
-  "summary": "Verified Nurse Ogochukwu Treasure as the first doctor card in Our Medical Directory with the newly uploaded image.",
-  "updatedAt": "2026-10-13T13:27:59.039069400Z",
-  "userFacing": true
+  "summary":  "Removed all placeholder doctors and their photos:\n- Erased Dr. Funmilayo Alao, Dr. Babajide Sowore, Dr. Amina Yusuf, Dr. Kingsley Peters, and Dr. Tochukwu Obi, along with all associated Unsplash photos and sample data.\n- Initial staff list now strictly contains the uploaded real staff:\n  - 7 Registered Nurses under 'Nursing'\n  - 1 Laboratory Scientist under 'Lab scientist' (Aina Segun Johnson)\n- Doctor category now cleanly awaits the user's doctor profiles with a tailored message.\n- Synchronized removal across Firestore listener, search, and directory views.",
+  "updatedAt":  "2026-11-07T14:51:37.863438832Z",
+  "userFacing":  true
 }

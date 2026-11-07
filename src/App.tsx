@@ -81,21 +81,38 @@ export default function App() {
           // Fallback to static initial list
           setDoctors(INITIAL_DOCTORS);
         } else {
+          const initialStaff = INITIAL_DOCTORS;
           const customDocs: Doctor[] = [];
           snapshot.forEach((docSnap) => {
             const docData = docSnap.data() as Doctor;
             const docId = docData.id || docSnap.id;
-            // Filter out old seed doc-1, doc-2, doc-3 if they exist in firestore with old data
-            if (docId !== "doc-1" && docId !== "doc-2" && docId !== "doc-3") {
+            const docNameLower = (docData.name || "").toLowerCase();
+
+            // Explicitly filter out and erase any placeholder doctors
+            const isPlaceholder = 
+              ["doc-4", "doc-5", "doc-6", "doc-7", "doc-8", "doc-9"].includes(docId) ||
+              docNameLower.includes("funmilayo") ||
+              docNameLower.includes("babajide") ||
+              docNameLower.includes("sowore") ||
+              docNameLower.includes("amina yusuf") ||
+              docNameLower.includes("kingsley") ||
+              docNameLower.includes("tochukwu") ||
+              docNameLower.includes("helen bassey");
+
+            if (isPlaceholder) {
+              // Delete from Firestore so it is erased completely
+              deleteDoc(doc(db, "doctors", docSnap.id)).catch(() => {});
+              return;
+            }
+
+            const isInitial = initialStaff.some((n) => n.id === docId);
+            if (!isInitial) {
               customDocs.push({ ...docData, id: docId });
             }
           });
-          // Guarantee the three nurses are always the first 3 doctors in the list
+          // Curated staff plus any newly created staff
           const combined = [
-            INITIAL_DOCTORS[0], // Nurse Ogochukwu Treasure (NURSING)
-            INITIAL_DOCTORS[1], // Nurse Ahmed Temitope Rosemary (NURSING)
-            INITIAL_DOCTORS[2], // Nurse Olaogun Niniola (NURSING)
-            ...INITIAL_DOCTORS.slice(3).filter(initDoc => !customDocs.some(cd => cd.id === initDoc.id)),
+            ...initialStaff,
             ...customDocs
           ];
           setDoctors(combined);
@@ -665,7 +682,7 @@ export default function App() {
               <div className="flex flex-col gap-2 text-xs text-emerald-200/80 font-sans">
                 <button onClick={() => setView("home")} className="text-left hover:text-emerald-400 cursor-pointer">Home</button>
                 <button onClick={() => setView("departments")} className="text-left hover:text-emerald-400 cursor-pointer">Medical Departments</button>
-                <button onClick={() => setView("doctors")} className="text-left hover:text-emerald-400 cursor-pointer">Find Doctors</button>
+                <button onClick={() => setView("doctors")} className="text-left hover:text-emerald-400 cursor-pointer">Our Staff</button>
                 <button onClick={() => setView("about")} className="text-left hover:text-emerald-400 cursor-pointer">About Hospital</button>
                 <button onClick={() => setView("contact")} className="text-left hover:text-emerald-400 cursor-pointer">Contact Desk</button>
               </div>
